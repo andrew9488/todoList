@@ -1,3 +1,4 @@
+/*
 .App {
   padding: 30px;
   display: flex;
@@ -6,23 +7,9 @@
 .App > div {
   margin-right: 50px;
 }
-
-.active-filter {
-  background-color: forestgreen;
-  outline: none;
-}
+*/
 
 .is-done {
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
-.error{
-  border: 2px solid red;
-  outline: none;
-}
-
-.error-message {
-  color: red;
-  padding-top: 4px;
-  margin-left: 30px;
-}
