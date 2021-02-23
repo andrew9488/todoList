@@ -12,13 +12,13 @@ export type TaskType = {
     isDone: boolean
 }
 
-type TodoListType = {
+export type TodoListType = {
     id: string
     title: string
     filter: FilterValuesType
 }
 
-type TaskStateType = {
+export type TaskStateType = {
     [key: string]: Array<TaskType>
 }
 
@@ -57,14 +57,6 @@ function App() {
         setTasks({...tasks})
     }
 
-    function changeFilter(newFilterValue: FilterValuesType, todoListID: string) { //функция фильтрации таски
-        const todoList = todoLists.find(tl => tl.id === todoListID)
-        if (todoList) {
-            todoList.filter = newFilterValue
-            setTodoLists([...todoLists])
-        }
-    }
-
     function addTask(taskTitle: string, todoListID: string) { //функция добавления таски
         const newTask: TaskType = {
             id: v1(),
@@ -76,6 +68,15 @@ function App() {
         setTasks({...tasks})
     }
 
+    function changeTaskTitle(taskID: string, title: string, todoListID: string) {
+        const todoListTasks = tasks[todoListID]
+        const task: TaskType | undefined = todoListTasks.find(t => t.id === taskID)
+        if (task) {
+            task.title = title
+            setTasks({...tasks})
+        }
+    }
+
     function changeStatus(taskID: string, isDone: boolean, todoListID: string) {
         const todoListTasks = tasks[todoListID]
         const task: TaskType | undefined = todoListTasks.find(t => t.id === taskID)
@@ -84,6 +85,7 @@ function App() {
             setTasks({...tasks})
         }
     }
+
 
     function removeTodoList(todoListID: string) {
         setTodoLists(todoLists.filter(tl => tl.id !== todoListID))
@@ -102,23 +104,21 @@ function App() {
         setTasks({...tasks, [newTodoListID]: []})
     }
 
-    function changeTaskTitle(taskID: string, title: string, todoListID: string) {
-        const todoListTasks = tasks[todoListID]
-        const task: TaskType | undefined = todoListTasks.find(t => t.id === taskID)
-        if (task) {
-            task.title = title
-            setTasks({...tasks})
-        }
-    }
-
-    function changeTodoListTitle(title: string, todoListID: string) {
-        const todoList = todoLists.find(t => t.id === todoListID)
+    function changeFilter(newFilterValue: FilterValuesType, todoListID: string) { //функция фильтрации таски
+        const todoList = todoLists.find(tl => tl.id === todoListID)
         if (todoList) {
-            todoList.title = title
+            todoList.filter = newFilterValue
             setTodoLists([...todoLists])
         }
     }
 
+    function changeTodoListTitle(newTitle: string, todoListID: string) {
+        const todoList = todoLists.find(t => t.id === todoListID)
+        if (todoList) {
+            todoList.title = newTitle
+            setTodoLists([...todoLists])
+        }
+    }
 
     //UI
     return (
