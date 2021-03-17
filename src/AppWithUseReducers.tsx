@@ -1,10 +1,22 @@
-import React, {useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import './App.css';
 import TodoList from "./TodoList";
 import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
+import {
+    addTodoListActionCreator,
+    changeFilterTodoListActionCreator, changeTodoListTitleActionCreator,
+    removeTodoListActionCreator,
+    todoListsReducer
+} from "./state/todolists-reducer";
+import {
+    addTaskActionCreator, changeTaskStatusActionCreator,
+    changeTaskTitleActionCreator,
+    removeTaskActionCreator,
+    tasksReducer
+} from "./state/tasks-reducer";
 
 type TaskType = {
     id: string
@@ -24,18 +36,18 @@ type TasksStateType = {
 
 type FilterValuesType = "all" | "active" | "completed"
 
-function App() {
+function AppWithUseReducers() {
 
     //BLL
     const todoListId1 = v1();
     const todoListId2 = v1();
 
-    const [todoLists, setTodoLists] = useState<Array<TodoListType>>([
+    const [todoLists, dispatchToTodoLists] = useReducer(todoListsReducer, [
         {id: todoListId1, title: "What to learn", filter: "all"},
         {id: todoListId2, title: "What to buy", filter: "all"},
     ]);
 
-    const [tasks, setTasks] = useState<TasksStateType>({
+    const [tasks, dispatchToTasks] = useReducer(tasksReducer, {
         [todoListId1]: [
             {id: v1(), title: "HTML&CSS", isDone: true},
             {id: v1(), title: "JS", isDone: true},
@@ -52,72 +64,43 @@ function App() {
     })
 
     function removeTask(taskId: string, todoListId: string) { // функция удаления таски
-        const todoListTasks = tasks[todoListId]
-        tasks[todoListId] = todoListTasks.filter(t => t.id !== taskId)
-        setTasks({...tasks})
+        dispatchToTasks(removeTaskActionCreator(taskId, todoListId))
     }
 
     function addTask(taskTitle: string, todoListId: string) { //функция добавления таски
-        const newTask: TaskType = {
-            id: v1(),
-            title: taskTitle,
-            isDone: false
-        }
-        const todoListTasks = tasks[todoListId]
-        tasks[todoListId] = [newTask, ...todoListTasks]
-        setTasks({...tasks})
+
+        dispatchToTasks(addTaskActionCreator(taskTitle, todoListId))
     }
 
     function changeTaskTitle(taskId: string, title: string, todoListId: string) {
-        const todoListTasks = tasks[todoListId]
-        const task: TaskType | undefined = todoListTasks.find(t => t.id === taskId)
-        if (task) {
-            task.title = title
-            setTasks({...tasks})
-        }
+        dispatchToTasks(changeTaskTitleActionCreator(taskId, title, todoListId))
     }
 
+
     function changeStatus(taskId: string, isDone: boolean, todoListId: string) {
-        const todoListTasks = tasks[todoListId]
-        const task: TaskType | undefined = todoListTasks.find(t => t.id === taskId)
-        if (task) {
-            task.isDone = isDone
-            setTasks({...tasks})
-        }
+        dispatchToTasks(changeTaskStatusActionCreator(taskId, isDone, todoListId))
     }
 
 
     function removeTodoList(todoListId: string) {
-        setTodoLists(todoLists.filter(tl => tl.id !== todoListId))
-        delete tasks[todoListId]
-        setTasks({...tasks})
+        let action = removeTodoListActionCreator(todoListId)
+        dispatchToTodoLists(action)
+        dispatchToTasks(action)
     }
 
     function addTodoList(newTitle: string) {
-        const newTodoListID = v1()
-        const newTodoList: TodoListType = {
-            id: newTodoListID,
-            title: newTitle,
-            filter: "all"
-        }
-        setTodoLists([newTodoList, ...todoLists])
-        setTasks({...tasks, [newTodoListID]: []})
+        let action = addTodoListActionCreator(newTitle)
+        dispatchToTodoLists(action)
+        dispatchToTasks(action)
     }
 
     function changeFilter(todoListId: string, newFilterValue: FilterValuesType) { //функция фильтрации таски
-        const todoList = todoLists.find(tl => tl.id === todoListId)
-        if (todoList) {
-            todoList.filter = newFilterValue
-            setTodoLists([...todoLists])
-        }
+        dispatchToTodoLists(changeFilterTodoListActionCreator(todoListId, newFilterValue))
     }
 
     function changeTodoListTitle(newTitle: string, todoListId: string) {
-        const todoList = todoLists.find(t => t.id === todoListId)
-        if (todoList) {
-            todoList.title = newTitle
-            setTodoLists([...todoLists])
-        }
+        dispatchToTodoLists(changeTodoListTitleActionCreator(newTitle, todoListId))
+
     }
 
     //UI
@@ -179,5 +162,4 @@ function App() {
         </div>
     );
 }
-
 

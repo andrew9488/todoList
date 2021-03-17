@@ -1,4 +1,4 @@
-import {FilterValuesType, TodoListType} from "../App";
+import {FilterValuesType, TasksStateType, TodoListType} from "../AppWithRedux";
 import {v1} from "uuid";
 
 export type RemoveTodoListActionType = {
@@ -31,7 +31,9 @@ export type ActionsTodoListType =
     | ChangeFilterTodoListActionType
     | ChangeTodoListTitleActionType
 
-export const todoListsReducer = (state: Array<TodoListType>, action: ActionsTodoListType): Array<TodoListType> => {
+let initialState: Array<TodoListType> = []
+
+export const todoListsReducer = (state: Array<TodoListType> = initialState, action: ActionsTodoListType): Array<TodoListType> => {
     switch (action.type) {
         case "REMOVE-TODOLIST": {
             return state.filter(st => st.id !== action.todoListId)
@@ -67,27 +69,27 @@ export const todoListsReducer = (state: Array<TodoListType>, action: ActionsTodo
     }
 }
 
-export const RemoveTodoListActionCreator = (id: string): RemoveTodoListActionType => {
+export const removeTodoListActionCreator = (id: string): RemoveTodoListActionType => {
     return {
         type: "REMOVE-TODOLIST",
         todoListId: id
     }
 }
-export const AddTodoListActionCreator = (title: string): AddTodoListActionType => {
+export const addTodoListActionCreator = (title: string): AddTodoListActionType => {
     return {
         type: "ADD-TODOLIST",
         newTitle: title,
         todoListId: v1()
     }
 }
-export const ChangeFilterTodoListActionCreator = (id: string, filter: FilterValuesType): ChangeFilterTodoListActionType => {
+export const changeFilterTodoListActionCreator = (id: string, filter: FilterValuesType): ChangeFilterTodoListActionType => {
     return {
         type: "CHANGE-FILTER-TODOLIST",
         newFilterValue: filter,
         todoListId: id
     }
 }
-export const ChangeTodoListTitleActionCreator = (id: string, title: string): ChangeTodoListTitleActionType => {
+export const changeTodoListTitleActionCreator = (title: string, id: string): ChangeTodoListTitleActionType => {
     return {
         type: "CHANGE-TITLE-TODOLIST",
         todoListId: id,
