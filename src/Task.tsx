@@ -4,13 +4,15 @@ import {EditableSpan} from "./EditableSpan";
 import {Delete} from "@material-ui/icons";
 import {TaskType} from "./AppWithRedux";
 
-type TaskPropsType = {
+export type TaskPropsType = {
     task: TaskType
     todoListId: string
     changeStatus: (taskId: string, isDone: boolean, todoListId: string) => void
     changeTaskTitle: (taskId: string, title: string, todoListId: string) => void
     removeTask: (taskId: string, todoListId: string) => void
 }
+
+
 
 export const Task = React.memo((props: TaskPropsType) => {
     console.log('task is called')
