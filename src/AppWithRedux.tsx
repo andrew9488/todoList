@@ -1,7 +1,6 @@
 import React, {useCallback} from 'react';
 import './App.css';
 import TodoList from "./TodoList";
-import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
@@ -46,8 +45,8 @@ function AppWithRedux() {
     const dispatch = useDispatch()
 
     //BLL
-    const todoListId1 = v1();
-    const todoListId2 = v1();
+    // const todoListId1 = v1();
+    // const todoListId2 = v1();
 
     /*const [todoLists, dispatchToTodoLists] = useReducer(todoListsReducer, [
         {id: todoListId1, title: "What to learn", filter: "all"},
