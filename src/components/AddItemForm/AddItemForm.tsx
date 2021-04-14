@@ -7,8 +7,8 @@ export type AddItemFormPropsType = {
     title: string
 }
 
-export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
-    console.log("AddItemForm is called")
+export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo((props) => {
+
     const [title, setTitle] = useState<string>("")
     const [error, setError] = useState<string | null>(null)
 
@@ -48,8 +48,8 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
                 label={props.title}
                 error={!!error}
             />
-            <IconButton>
-                <AddBox onClick={addItem}/>
+            <IconButton onClick={addItem} color="primary">
+                <AddBox/>
             </IconButton>
         </div>
     );

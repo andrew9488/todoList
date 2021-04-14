@@ -1,17 +1,18 @@
 import {tasksReducer, TasksStateType} from "./tasks-reducer";
 import {
-    addTodoListActionCreator,
-    CommonTodoListType,
-    removeTodoListActionCreator,
+    addTodoListAC,
+    removeTodoListAC,
+    setTodoListsAC,
+    TodoListDomainType,
     todoListsReducer
 } from "./todolists-reducer";
-import {TaskPriorities, TaskStatuses, TodoListType} from "../api/todolist-api";
+import {TaskPriorities, TaskStatuses} from "../../api/todolist-api";
 
 test('ids should be equals', () => {
     const startTasksState: TasksStateType = {};
-    const startTodoListsState: Array<CommonTodoListType> = [];
+    const startTodoListsState: Array<TodoListDomainType> = [];
 
-    const action = addTodoListActionCreator("new todolist");
+    const action = addTodoListAC({id: "todoListId3", title: "What to create", addedDate: "", order: 2});
 
     const endTasksState = tasksReducer(startTasksState, action)
     const endTodoListsState = todoListsReducer(startTodoListsState, action)
@@ -20,8 +21,8 @@ test('ids should be equals', () => {
     const idFromTasks = keys[0];
     const idFromTodoLists = endTodoListsState[0].id;
 
-    expect(idFromTasks).toBe(action.todoListId);
-    expect(idFromTodoLists).toBe(action.todoListId);
+    expect(idFromTasks).toBe(action.todoList.id);
+    expect(idFromTodoLists).toBe(action.todoList.id);
 });
 
 test('property with todolistId should be deleted', () => {
@@ -56,7 +57,7 @@ test('property with todolistId should be deleted', () => {
         ]
     };
 
-    const action = removeTodoListActionCreator("todoListId2");
+    const action = removeTodoListAC("todoListId2");
 
     const endState = tasksReducer(startState, action)
 
@@ -65,4 +66,20 @@ test('property with todolistId should be deleted', () => {
     expect(keys.length).toBe(1);
     expect(endState["todoListId2"]).not.toBeDefined();
 });
+
+test('empty arrays should be added when todolists was set', () => {
+
+    const action = setTodoListsAC([
+        {id: "1", title: "What to learn", addedDate: "", order: 0},
+        {id: "2", title: "What to buy", addedDate: "", order: 1}
+    ])
+
+    const endState = tasksReducer({}, action)
+
+    const keys = Object.keys(endState);
+
+    expect(keys.length).toBe(2);
+    expect(endState["1"]).toStrictEqual([]);
+    expect(endState["2"]).toStrictEqual([]);
+})
 

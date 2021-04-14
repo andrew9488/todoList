@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {todoListsApi} from "../api/todolist-api";
+import {TaskPriorities, TaskStatuses, todoListsApi} from "../api/todolist-api";
 
 export default {
     title: 'API'
@@ -86,10 +86,17 @@ export const UpdateTask = () => {
     useEffect(() => {
         const todoListId = "7664cd3a-46a8-4ce4-981c-c40ab8761cb6"
         const taskId = "f003fd16-08d7-44c3-a207-373b12e80f18"
-        const taskTitle = "React"
-        todoListsApi.updateTaskTitle(todoListId, taskId,taskTitle)
+        const module = {
+            title: "new Title",
+            status: TaskStatuses.New,
+            deadline: "",
+            description: "",
+            priority: TaskPriorities.Low,
+            startDate: ""
+        }
+        todoListsApi.updateTask(todoListId, taskId,module)
             .then((res) => {
-                setState(res.data.data.item.title)
+                setState(res.data.data)
             })
     }, [])
 
