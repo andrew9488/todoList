@@ -1,6 +1,6 @@
 import {v1} from 'uuid';
 import {
-    ActionsTodoListType,
+    TodoListsActionsType,
     addTodoListAC, changeFilterTodoListAC, changeTodoListTitleAC, TodoListDomainType,
     removeTodoListAC,
     todoListsReducer,
@@ -44,7 +44,7 @@ test('correct todoList should change title', () => {
 
     let newTodoListTitle = "New TodoList";
 
-    const action: ActionsTodoListType = changeTodoListTitleAC(newTodoListTitle, todoListId2)
+    const action: TodoListsActionsType = changeTodoListTitleAC(newTodoListTitle, todoListId2)
 
     const endState = todoListsReducer(startState, action);
 
@@ -56,7 +56,7 @@ test('correct filter of todoList should be changed', () => {
 
     let newFilter: FilterValuesType = "completed";
 
-    const action: ActionsTodoListType = changeFilterTodoListAC(todoListId2, newFilter)
+    const action: TodoListsActionsType = changeFilterTodoListAC(todoListId2, newFilter)
 
     const endState = todoListsReducer(startState, action);
 
