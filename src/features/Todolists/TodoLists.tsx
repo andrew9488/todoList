@@ -16,7 +16,11 @@ import {Grid, Paper} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./Todolist/TodoList";
 
-export const TodoLists: React.FC = () => {
+type TodoListsPropsType = {
+    demo?: boolean
+}
+
+export const TodoLists: React.FC<TodoListsPropsType> = ({demo = false}) => {
 
     let todoLists: Array<TodoListDomainType> = useSelector<AppRootStateType, Array<TodoListDomainType>>(state => state.todoLists)
     let tasks: TasksStateType = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
@@ -24,6 +28,9 @@ export const TodoLists: React.FC = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        if (demo) {
+            return;
+        }
         dispatch(fetchTodoListsTC())
     }, [])
 
@@ -70,17 +77,16 @@ export const TodoLists: React.FC = () => {
                                 <Paper style={{padding: "7px"}}
                                        elevation={3}>
                                     <TodoList
-                                        id={tl.id}
-                                        title={tl.title}
+                                        todoList={tl}
                                         tasks={allTaskTodoList}
                                         addTask={addTask}
                                         removeTodolist={removeTodoList}
                                         removeTask={removeTask}
                                         changeFilter={changeFilter}
                                         changeTaskStatus={changeTaskStatus}
-                                        filter={tl.filter}
                                         changeTaskTitle={changeTaskTitle}
                                         changeTodoListTitle={changeTodoListTitle}
+                                        demo={demo}
                                     />
                                 </Paper>
                             </Grid>

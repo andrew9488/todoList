@@ -5,15 +5,16 @@ import {AddBox} from "@material-ui/icons";
 export type AddItemFormPropsType = {
     addItem: (title: string) => void
     title: string
+    disabled?: boolean
 }
 
-export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo((props) => {
+export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({addItem, title, disabled = false}) => {
 
-    const [title, setTitle] = useState<string>("")
+    const [value, setValue] = useState<string>("")
     const [error, setError] = useState<string | null>(null)
 
     const onChangeTitleItemHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
+        setValue(e.currentTarget.value)
         setError(null)
     }
 
@@ -21,34 +22,35 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo((props) =>
         if (error !== null) {
             setError(null)
         }
-        if (e.key === "Enter") addItem()
+        if (e.key === "Enter") addItemHandler()
     }
 
-    const addItem = () => {
-        const trimmedTitle = title.trim()
+    const addItemHandler = () => {
+        const trimmedTitle = value.trim()
         if (trimmedTitle) {
-            props.addItem(trimmedTitle)
+            addItem(trimmedTitle)
         } else {
             setError("Title is required!")
         }
-        setTitle("")
+        setValue("")
     }
 
     return (
         <div>
             <TextField
                 variant={"outlined"}
-                value={title}
+                value={value}
                 onChange={onChangeTitleItemHandler}
                 onKeyPress={onKeyPressHandler}
                 onBlur={() => {
                     setError(null)
                 }}
                 helperText={error ? "Title is required!" : ""}
-                label={props.title}
+                label={title}
                 error={!!error}
+                disabled={disabled}
             />
-            <IconButton onClick={addItem} color="primary">
+            <IconButton onClick={addItemHandler} color="primary" disabled={disabled}>
                 <AddBox/>
             </IconButton>
         </div>

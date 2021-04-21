@@ -9,7 +9,11 @@ import {RequestStatusType} from "./app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 
 
-const App: React.FC = () => {
+type AppPropsType = {
+    demo?: boolean
+}
+
+export const App: React.FC<AppPropsType> = ({demo = false}) => {
 
     const appStatus = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
 
@@ -29,11 +33,9 @@ const App: React.FC = () => {
                 {appStatus === "loading" && <LinearProgress color="secondary"/>}
             </AppBar>
             <Container fixed>
-                <TodoLists/>
+                <TodoLists demo={demo}/>
             </Container>
         </div>
     );
 }
-
-export default App;
 

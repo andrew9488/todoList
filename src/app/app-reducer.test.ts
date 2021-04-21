@@ -9,7 +9,7 @@ beforeEach(() => {
     }
 })
 
-test("status should be change", () => {
+test("status should be set", () => {
 
     const status = "succeeded"
 
