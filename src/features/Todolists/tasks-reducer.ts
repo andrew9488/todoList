@@ -8,6 +8,7 @@ type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
 type AddTaskActionType = ReturnType<typeof addTaskAC>
 type UpdateTaskActionType = ReturnType<typeof updateTaskAC>
 type SetTasksActionType = ReturnType<typeof setTasksAC>
+type ChangeTasksEntityStatusActionType = ReturnType<typeof changeTasksEntityStatus>
 
 export type TasksActionsType =
     RemoveTaskActionType
@@ -17,6 +18,7 @@ export type TasksActionsType =
     | RemoveTodoListActionType
     | SetTodoListsActionType
     | SetTasksActionType
+    | ChangeTasksEntityStatusActionType
 
 type UpdateTaskDomainModelType = {
     title?: string
@@ -27,8 +29,10 @@ type UpdateTaskDomainModelType = {
     deadline?: string
 }
 
+export type TaskDomainType = TaskType & { entityStatus: RequestStatusType }
+
 export type TasksStateType = {
-    [key: string]: Array<TaskType & { entityStatus: RequestStatusType }>
+    [key: string]: Array<TaskDomainType>
 }
 
 let initialState: TasksStateType = {}
@@ -78,6 +82,13 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Tasks
                 [action.todoListId]: action.tasks.map(t => ({...t, entityStatus: "idle"}))
             }
         }
+        case "TASKS/CHANGE-TASKS-ENTITY-STATUS": {
+            return {
+                ...state,
+                [action.todoListId]: state[action.todoListId]
+                    .map(t => t.id === action.taskId ? {...t, entityStatus: action.entityStatus} : t)
+            }
+        }
         default:
             return state
     }
@@ -111,6 +122,7 @@ export const fetchTaskTC = (todoListId: string): AppThunkType => dispatch => {
 
 export const removeTaskTC = (todoListId: string, taskId: string): AppThunkType => dispatch => {
     dispatch(setAppStatusAC("loading"))
+    dispatch(changeTasksEntityStatus(todoListId, taskId, "loading"))
     todoListsApi.deleteTask(todoListId, taskId)
         .then(() => {
             dispatch(removeTaskAC(taskId, todoListId))

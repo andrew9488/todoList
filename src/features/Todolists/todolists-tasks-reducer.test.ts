@@ -12,7 +12,7 @@ test('ids should be equals', () => {
     const startTasksState: TasksStateType = {};
     const startTodoListsState: Array<TodoListDomainType> = [];
 
-    const action = addTodoListAC({id: "todoListId3", title: "What to create", addedDate: "", order: 2, });
+    const action = addTodoListAC({id: "todoListId3", title: "What to create", addedDate: "", order: 2,});
 
     const endTasksState = tasksReducer(startTasksState, action)
     const endTodoListsState = todoListsReducer(startTodoListsState, action)
@@ -30,29 +30,35 @@ test('property with todolistId should be deleted', () => {
         "todoListId1": [
             {
                 id: "1", title: "CSS", status: TaskStatuses.New, addedDate: "", deadline: "",
-                description: "", order: 0, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1"
+                description: "", order: 0, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1",
+                entityStatus: "idle"
             },
             {
                 id: "2", title: "JS", status: TaskStatuses.Completed, addedDate: "", deadline: "",
-                description: "", order: 1, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1"
+                description: "", order: 1, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1",
+                entityStatus: "idle"
             },
             {
                 id: "3", title: "React", status: TaskStatuses.New, addedDate: "", deadline: "",
-                description: "", order: 2, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1"
+                description: "", order: 2, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1",
+                entityStatus: "idle"
             }
         ],
         "todoListId2": [
             {
                 id: "1", title: "bread", status: TaskStatuses.New, addedDate: "", deadline: "",
-                description: "", order: 0, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId2"
+                description: "", order: 0, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId2",
+                entityStatus: "idle"
             },
             {
                 id: "2", title: "milk", status: TaskStatuses.Completed, addedDate: "", deadline: "",
-                description: "", order: 2, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId2"
+                description: "", order: 2, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId2",
+                entityStatus: "idle"
             },
             {
                 id: "3", title: "tea", status: TaskStatuses.New, addedDate: "", deadline: "",
-                description: "", order: 3, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId2"
+                description: "", order: 3, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId2",
+                entityStatus: "idle"
             }
         ]
     };

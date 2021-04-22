@@ -28,7 +28,7 @@ TaskIsNotDoneStories.args = {
     ...argsCallback,
     task: {
         id: "1", title: "JS", status: TaskStatuses.New, addedDate: "", deadline: "",
-        description: "", order: 0, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1"
+        description: "", order: 0, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1",
     },
     todoListId: "todoListId1"
 }

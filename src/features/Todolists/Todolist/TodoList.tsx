@@ -4,14 +4,14 @@ import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
 import {Task} from "./Task/Task";
-import {TaskStatuses, TaskType} from "../../../api/todolist-api";
+import {TaskStatuses} from "../../../api/todolist-api";
 import {FilterValuesType, TodoListDomainType} from "../todolists-reducer";
-import {fetchTaskTC} from "../tasks-reducer";
+import {fetchTaskTC, TaskDomainType} from "../tasks-reducer";
 import {useDispatch} from "react-redux";
 
 type TodoListPropsType = {
     todoList: TodoListDomainType
-    tasks: Array<TaskType>
+    tasks: Array<TaskDomainType>
     addTask: (taskTitle: string, todoListId: string) => void
     removeTask: (taskId: string, todoListId: string) => void
     changeFilter: (todoListId: string, newFilterValue: FilterValuesType) => void
@@ -60,13 +60,14 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
     const tasks = taskForTodoList.map(t => {
         return (
             <Task key={t.id} task={t} changeTaskStatus={props.changeTaskStatus} changeTaskTitle={props.changeTaskTitle}
-                  removeTask={props.removeTask} todoListId={props.todoList.id} />
+                  removeTask={props.removeTask} todoListId={props.todoList.id} disabled={t.entityStatus === "loading"}/>
         );
     })
 
     return (
         <div>
-            <h3><EditableSpan title={props.todoList.title} changeItem={changeTodoListTitle}/>
+            <h3><EditableSpan title={props.todoList.title} changeItem={changeTodoListTitle}
+                              disabled={props.todoList.entityStatus === "loading"}/>
                 <IconButton onClick={removeTodoList} disabled={props.todoList.entityStatus === "loading"}>
                     <Delete/>
                 </IconButton>

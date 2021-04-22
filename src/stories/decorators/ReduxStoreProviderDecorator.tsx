@@ -25,29 +25,35 @@ const initialGlobalState = {
         ["todoListId1"]: [
             {
                 id: v1(), title: "HTML&CSS", status: TaskStatuses.Completed, addedDate: "", deadline: "",
-                description: "", order: 0, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1"
+                description: "", order: 0, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1",
+                entityStatus: "idle"
             },
             {
                 id: v1(), title: "JS", status: TaskStatuses.Completed, addedDate: "", deadline: "",
-                description: "", order: 1, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1"
+                description: "", order: 1, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1",
+                entityStatus: "idle"
             },
             {
                 id: v1(), title: "React", status: TaskStatuses.New, addedDate: "", deadline: "",
-                description: "", order: 2, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1"
+                description: "", order: 2, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1",
+                entityStatus: "idle"
             }
         ],
         ["todoListId2"]: [
             {
                 id: v1(), title: "Book Sandman", status: TaskStatuses.Completed, addedDate: "", deadline: "",
-                description: "", order: 0, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId2"
+                description: "", order: 0, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId2",
+                entityStatus: "idle"
             },
             {
                 id: v1(), title: "React Book", status: TaskStatuses.New, addedDate: "", deadline: "",
-                description: "", order: 1, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId2"
+                description: "", order: 1, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId2",
+                entityStatus: "idle"
             },
             {
                 id: v1(), title: "JS Book", status: TaskStatuses.Completed, addedDate: "", deadline: "",
-                description: "", order: 2, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId2"
+                description: "", order: 2, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId2",
+                entityStatus: "idle"
             }
         ]
     },

@@ -10,10 +10,10 @@ export type TaskPropsType = {
     changeTaskStatus: (taskId: string, status: TaskStatuses, todoListId: string) => void
     changeTaskTitle: (taskId: string, title: string, todoListId: string) => void
     removeTask: (taskId: string, todoListId: string) => void
+    disabled: boolean
 }
 
 export const Task: React.FC<TaskPropsType> = React.memo((props) => {
-    console.log('task is called')
 
     const removeTask = () => props.removeTask(props.task.id, props.todoListId)
 
@@ -30,8 +30,8 @@ export const Task: React.FC<TaskPropsType> = React.memo((props) => {
                     color={"secondary"}
                     checked={props.task.status === TaskStatuses.Completed}
                     onChange={changeStatus}/>
-                <EditableSpan title={props.task.title} changeItem={changeTaskTitle}/>
-                <IconButton onClick={removeTask}>
+                <EditableSpan title={props.task.title} changeItem={changeTaskTitle} disabled={props.disabled}/>
+                <IconButton onClick={removeTask} disabled={props.disabled}>
                     <Delete/>
                 </IconButton>
             </li>
