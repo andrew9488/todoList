@@ -7,6 +7,8 @@ import {useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
 import {RequestStatusType} from "./app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
+import {Login} from "../features/Login/Login";
+import {Route, Switch, Redirect} from 'react-router-dom';
 
 
 type AppPropsType = {
@@ -33,7 +35,12 @@ export const App: React.FC<AppPropsType> = ({demo = false}) => {
                 {appStatus === "loading" && <LinearProgress color="secondary"/>}
             </AppBar>
             <Container fixed>
-                <TodoLists demo={demo}/>
+                <Switch>
+                    <Route exact path="/" render={() => <TodoLists demo={demo}/>}/>
+                    <Route path="/login" render={() => <Login/>}/>
+                    <Route path="/404" render={() => <h1>ERROR 404. PAGE NOT FOUND</h1>}/>
+                    <Redirect from="*" to="/404"/>
+                </Switch>
             </Container>
         </div>
     );
