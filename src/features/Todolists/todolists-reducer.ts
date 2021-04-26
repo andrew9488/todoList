@@ -50,18 +50,13 @@ export const todoListsReducer = (state: Array<TodoListDomainType> = initialState
 }
 
 export const removeTodoListAC = (id: string) => ({type: "TODOLISTS/REMOVE-TODOLIST", todoListId: id} as const)
-
 export const addTodoListAC = (todoList: TodoListType) => ({type: "TODOLISTS/ADD-TODOLIST", todoList} as const)
-
 export const changeFilterTodoListAC = (id: string, filter: FilterValuesType) =>
     ({type: "TODOLISTS/CHANGE-FILTER-TODOLIST", newFilterValue: filter, todoListId: id} as const)
-
 export const changeTodoListTitleAC = (title: string, id: string) =>
     ({type: "TODOLISTS/CHANGE-TITLE-TODOLIST", todoListId: id, newTitle: title} as const)
-
 export const setTodoListsAC = (todoLists: Array<TodoListType>) =>
     ({type: "TODOLISTS/SET-TODOLISTS", todoLists} as const)
-
 export const changeTodoListEntityStatusAC = (todoListId: string, entityStatus: RequestStatusType) =>
     ({type: "TODOLISTS/CHANGE-TODOLIST-ENTITY-STATUS", todoListId, entityStatus} as const)
 
@@ -81,9 +76,13 @@ export const removeTodoListTC = (todoListId: string): AppThunkType => dispatch =
     dispatch(setAppStatusAC("loading"))
     dispatch(changeTodoListEntityStatusAC(todoListId, "loading"))
     todoListsApi.deleteTodoList(todoListId)
-        .then(() => {
-            dispatch(removeTodoListAC(todoListId))
-            dispatch(setAppStatusAC("succeeded"))
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(removeTodoListAC(todoListId))
+                dispatch(setAppStatusAC("succeeded"))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
         })
         .catch(error => {
             handleServerNetworkError(error, dispatch)
@@ -109,9 +108,13 @@ export const addTodoListTC = (title: string): AppThunkType => dispatch => {
 export const changeTodoListTitleTC = (todoListId: string, title: string): AppThunkType => dispatch => {
     dispatch(setAppStatusAC("loading"))
     todoListsApi.updateTodoListTitle(todoListId, title)
-        .then(() => {
-            dispatch(changeTodoListTitleAC(title, todoListId))
-            dispatch(setAppStatusAC("succeeded"))
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(changeTodoListTitleAC(title, todoListId))
+                dispatch(setAppStatusAC("succeeded"))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
         })
         .catch(error => {
             handleServerNetworkError(error, dispatch)
