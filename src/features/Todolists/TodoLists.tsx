@@ -15,6 +15,7 @@ import {TaskStatuses} from "../../api/todolist-api";
 import {Grid, Paper} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./Todolist/TodoList";
+import {Redirect} from "react-router-dom";
 
 type TodoListsPropsType = {
     demo?: boolean
@@ -24,11 +25,12 @@ export const TodoLists: React.FC<TodoListsPropsType> = ({demo = false}) => {
 
     let todoLists: Array<TodoListDomainType> = useSelector<AppRootStateType, Array<TodoListDomainType>>(state => state.todoLists)
     let tasks: TasksStateType = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (demo) {
+        if (demo || !isLoggedIn) {
             return;
         }
         dispatch(fetchTodoListsTC())
@@ -59,6 +61,10 @@ export const TodoLists: React.FC<TodoListsPropsType> = ({demo = false}) => {
     const changeTodoListTitle = useCallback((newTitle: string, todoListId: string) => {
         dispatch(changeTodoListTitleTC(todoListId, newTitle))
     }, [dispatch])
+
+    if (!isLoggedIn) {
+        return <Redirect to="/login"/>
+    }
 
     return (
         <>

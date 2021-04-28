@@ -4,7 +4,7 @@ import {
     removeTaskAC,
     setTasksAC,
     tasksReducer,
-    TasksStateType, changeTasksEntityStatus
+    TasksStateType, changeTasksEntityStatusAC
 } from "./tasks-reducer";
 import {addTodoListAC} from "./todolists-reducer";
 import {TaskPriorities, TaskStatuses} from "../../api/todolist-api";
@@ -161,7 +161,7 @@ test('empty array should be added for todolists', () => {
 
 test('entity status task should be changed', () => {
 
-    const action = changeTasksEntityStatus("todoListId1", "2", "succeeded");
+    const action = changeTasksEntityStatusAC("todoListId1", "2", "succeeded");
 
     const endState = tasksReducer(startState, action)
 

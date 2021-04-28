@@ -1,6 +1,10 @@
 import React from 'react'
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
 import {useFormik} from "formik";
+import {useDispatch, useSelector} from "react-redux";
+import {loginTC} from "./authReducer";
+import {AppRootStateType} from "../../app/store";
+import {Redirect} from "react-router-dom";
 
 type FormikErrorType = {
     email?: string
@@ -9,6 +13,9 @@ type FormikErrorType = {
 }
 
 export const Login: React.FC = () => {
+
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+    const dispatch = useDispatch()
 
     const formik = useFormik({
         initialValues: {
@@ -33,10 +40,14 @@ export const Login: React.FC = () => {
             return errors;
         },
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            dispatch(loginTC(values))
             formik.resetForm()
         },
     });
+
+    if (isLoggedIn) {
+        return <Redirect to="/"/>
+    }
 
     return <Grid container justify="center">
         <Grid item xs={4}>
@@ -64,13 +75,15 @@ export const Login: React.FC = () => {
                             type="password"
                             label="Password"
                             margin="normal"
-
+                            {...formik.getFieldProps("password")}
                         />
                         {formik.touched.password && formik.errors.password ? (
                             <div style={{color: "red"}}>{formik.errors.password}</div>) : null}
                         <FormControlLabel
                             label={'Remember me'}
-                            control={<Checkbox{...formik.getFieldProps("rememberMe")}/>}
+                            control={<Checkbox{...formik.getFieldProps("rememberMe")}
+                                              checked={formik.values.rememberMe}
+                            />}
                         />
                         <Button type={'submit'} variant={'contained'} color={'primary'}>Login</Button>
                     </FormGroup>

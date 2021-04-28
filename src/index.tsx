@@ -8,7 +8,7 @@ import {App} from "./app/App";
 import {BrowserRouter} from "react-router-dom";
 
 ReactDOM.render(
-    <BrowserRouter>
+    <BrowserRouter basename={"/todolist"}>
         <Provider store={store}>
             <App/>
         </Provider>

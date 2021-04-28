@@ -8,7 +8,7 @@ type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
 type AddTaskActionType = ReturnType<typeof addTaskAC>
 type UpdateTaskActionType = ReturnType<typeof updateTaskAC>
 type SetTasksActionType = ReturnType<typeof setTasksAC>
-type ChangeTasksEntityStatusActionType = ReturnType<typeof changeTasksEntityStatus>
+type ChangeTasksEntityStatusActionType = ReturnType<typeof changeTasksEntityStatusAC>
 
 export type TasksActionsType =
     RemoveTaskActionType
@@ -72,7 +72,9 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Tasks
         case "TODOLISTS/SET-TODOLISTS": {
             const stateCopy = {...state}
             action.todoLists.forEach(tl => {
-                stateCopy[tl.id] = []
+                if(!stateCopy[tl.id]) {
+                    stateCopy[tl.id] = []
+                }
             })
             return stateCopy
         }
@@ -101,7 +103,7 @@ export const updateTaskAC = (taskId: string, model: UpdateTaskDomainModelType, t
     ({type: "TASKS/UPDATE-TASK", taskId, model, todoListId} as const)
 export const setTasksAC = (todoListId: string, tasks: Array<TaskType>) =>
     ({type: "TASKS/SET-TASKS", todoListId, tasks} as const)
-export const changeTasksEntityStatus = (todoListId: string, taskId: string, entityStatus: RequestStatusType) =>
+export const changeTasksEntityStatusAC = (todoListId: string, taskId: string, entityStatus: RequestStatusType) =>
     ({type: "TASKS/CHANGE-TASKS-ENTITY-STATUS", todoListId, taskId, entityStatus} as const)
 
 export const fetchTaskTC = (todoListId: string): AppThunkType => dispatch => {
@@ -118,7 +120,7 @@ export const fetchTaskTC = (todoListId: string): AppThunkType => dispatch => {
 
 export const removeTaskTC = (todoListId: string, taskId: string): AppThunkType => dispatch => {
     dispatch(setAppStatusAC("loading"))
-    dispatch(changeTasksEntityStatus(todoListId, taskId, "loading"))
+    dispatch(changeTasksEntityStatusAC(todoListId, taskId, "loading"))
     todoListsApi.deleteTask(todoListId, taskId)
         .then(res => {
             if (res.data.resultCode === 0) {
