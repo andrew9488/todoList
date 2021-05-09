@@ -56,7 +56,7 @@ export const Login: React.FC = () => {
                     <FormLabel>
                         <p>To log in get registered
                             <a href={'https://social-network.samuraijs.com/'}
-                               target={'_blank'}> here
+                               target={'_blank'}  rel="noopener noreferrer"> here
                             </a>
                         </p>
                         <p>or use common test account credentials:</p>
