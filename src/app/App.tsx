@@ -56,9 +56,6 @@ export const App: React.FC<AppPropsType> = ({demo = false}) => {
                     <IconButton edge="start" color="inherit" aria-label="menu">
                         <Menu/>
                     </IconButton>
-                    <Typography variant="h6">
-                        News
-                    </Typography>
                     {isLoggedIn && <Button color="inherit" onClick={logout}>Logout</Button>}
                 </Toolbar>
                 {appStatus === "loading" && <LinearProgress color="secondary"/>}
