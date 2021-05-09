@@ -24,13 +24,13 @@ const slice = createSlice({
     name: "app",
     initialState: initialState,
     reducers: {
-        setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
+        setAppStatusAC: (state, action: PayloadAction<{ status: RequestStatusType }>) => {
             state.status = action.payload.status
         },
-        setAppErrorAC(state, action: PayloadAction<{ error: null | string }>) {
+        setAppErrorAC: (state, action: PayloadAction<{ error: string | null }>) => {
             state.error = action.payload.error
         },
-        setIsInitializedAC(state, action: PayloadAction<{ isInitialized: boolean }>) {
+        setIsInitializedAC: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
             state.isInitialized = action.payload.isInitialized
         }
     }
@@ -43,12 +43,12 @@ export const initializeAppTC = (): AppThunkType => dispatch => {
     authAPI.me()
         .then(res => {
             if (res.data.resultCode === 0) {
-                dispatch(setIsLoggedInAC({value: true}));
-                dispatch(setAppStatusAC({status:"succeeded"}))
+                dispatch(setIsLoggedInAC({isLoggedIn: true}));
+                dispatch(setAppStatusAC({status: "succeeded"}))
             } else {
                 handleServerAppError(res.data, dispatch)
             }
-            dispatch(setIsInitializedAC({isInitialized:true}))
+            dispatch(setIsInitializedAC({isInitialized: true}))
         })
         .catch(error => {
             handleServerNetworkError(error, dispatch)

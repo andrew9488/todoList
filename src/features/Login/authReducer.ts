@@ -16,8 +16,8 @@ const slice = createSlice({
     name: "auth",
     initialState: initialState,
     reducers: {
-        setIsLoggedInAC(state, action: PayloadAction<{ value: boolean }>) {
-            state.isLoggedIn = action.payload.value
+        setIsLoggedInAC: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
+            state.isLoggedIn = action.payload.isLoggedIn
         }
     }
 })
@@ -26,12 +26,12 @@ export const authReducer = slice.reducer
 export const {setIsLoggedInAC} = slice.actions
 
 export const loginTC = (data: LoginParamsType): AppThunkType => dispatch => {
-    dispatch(setAppStatusAC({status:"loading"}))
+    dispatch(setAppStatusAC({status: "loading"}))
     authAPI.login(data)
         .then(res => {
             if (res.data.resultCode === 0) {
-                dispatch(setIsLoggedInAC({value: true}))
-                dispatch(setAppStatusAC({status:"succeeded"}))
+                dispatch(setIsLoggedInAC({isLoggedIn: true}))
+                dispatch(setAppStatusAC({status: "succeeded"}))
             } else {
                 handleServerAppError(res.data, dispatch)
             }
@@ -42,12 +42,12 @@ export const loginTC = (data: LoginParamsType): AppThunkType => dispatch => {
 }
 
 export const logoutTC = (): AppThunkType => dispatch => {
-    dispatch(setAppStatusAC({status:"loading"}))
+    dispatch(setAppStatusAC({status: "loading"}))
     authAPI.logout()
         .then(res => {
             if (res.data.resultCode === 0) {
-                dispatch(setIsLoggedInAC({value: false}))
-                dispatch(setAppStatusAC({status:"succeeded"}))
+                dispatch(setIsLoggedInAC({isLoggedIn: false}))
+                dispatch(setAppStatusAC({status: "succeeded"}))
             } else {
                 handleServerAppError(res.data, dispatch)
             }
