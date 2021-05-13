@@ -110,7 +110,7 @@ test('correct task should be added to correct array', () => {
 
 test('status of specified task should be changed', () => {
 
-    const action = updateTaskAC({taskId: "2", model: TaskStatuses.New, todoListId: "todoListId2"});
+    const action = updateTaskAC({taskId: "2", model: {status: TaskStatuses.New}, todoListId: "todoListId2"});
 
     const endState = tasksReducer(startState, action)
 
@@ -121,7 +121,7 @@ test('status of specified task should be changed', () => {
 
 test('title of specified task should be changed', () => {
 
-    const action = updateTaskAC({taskId: "2", model: "beer", todoListId: "todoListId2"});
+    const action = updateTaskAC({taskId: "2", model: {title: "beer"}, todoListId: "todoListId2"});
 
     const endState = tasksReducer(startState, action)
 
