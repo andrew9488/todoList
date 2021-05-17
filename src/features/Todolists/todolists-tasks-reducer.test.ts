@@ -12,7 +12,7 @@ test('ids should be equals', () => {
     const startTasksState: TasksStateType = {};
     const startTodoListsState: Array<TodoListDomainType> = [];
 
-    const action = addTodoListAC({id: "todoListId3", title: "What to create", addedDate: "", order: 2,});
+    const action = addTodoListAC({todoList: {id: "todoListId3", title: "What to create", addedDate: "", order: 2}});
 
     const endTasksState = tasksReducer(startTasksState, action)
     const endTodoListsState = todoListsReducer(startTodoListsState, action)
@@ -21,8 +21,8 @@ test('ids should be equals', () => {
     const idFromTasks = keys[0];
     const idFromTodoLists = endTodoListsState[0].id;
 
-    expect(idFromTasks).toBe(action.todoList.id);
-    expect(idFromTodoLists).toBe(action.todoList.id);
+    expect(idFromTasks).toBe(action.payload.todoList.id);
+    expect(idFromTodoLists).toBe(action.payload.todoList.id);
 });
 
 test('property with todolistId should be deleted', () => {
@@ -63,7 +63,7 @@ test('property with todolistId should be deleted', () => {
         ]
     };
 
-    const action = removeTodoListAC("todoListId2");
+    const action = removeTodoListAC({id:"todoListId2"});
 
     const endState = tasksReducer(startState, action)
 
@@ -75,10 +75,10 @@ test('property with todolistId should be deleted', () => {
 
 test('empty arrays should be added when todolists was set', () => {
 
-    const action = setTodoListsAC([
+    const action = setTodoListsAC({todoLists:[
         {id: "1", title: "What to learn", addedDate: "", order: 0},
         {id: "2", title: "What to buy", addedDate: "", order: 1}
-    ])
+    ]})
 
     const endState = tasksReducer({}, action)
 
