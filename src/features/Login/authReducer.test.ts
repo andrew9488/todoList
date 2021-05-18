@@ -1,4 +1,4 @@
-import {authReducer, InitialStateType, login} from "./authReducer";
+import {authReducer, InitialStateType, loginTC} from "./authReducer";
 
 let startState: InitialStateType;
 
@@ -16,7 +16,7 @@ test("isLoggedIn should be set", () => {
         password: "qwerty123",
         rememberMe: true,
     }
-    const endState = authReducer(startState, login.fulfilled(isLoggedIn, "", payload))
+    const endState = authReducer(startState, loginTC.fulfilled(isLoggedIn, "", payload))
 
     expect(endState.isLoggedIn).toBeTruthy()
 
