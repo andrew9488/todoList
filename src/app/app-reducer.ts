@@ -18,7 +18,7 @@ const initialState = {
     isInitialized: false
 }
 
-export const initializeApp = createAsyncThunk("app/initializeApp", async (payload, thunkAPI) => {
+export const initializeAppTC = createAsyncThunk("app/initializeApp", async (payload, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: "loading"}))
     try {
         const response = await authAPI.me()
@@ -48,7 +48,7 @@ const slice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(initializeApp.fulfilled, (state, action) => {
+        builder.addCase(initializeAppTC.fulfilled, (state, action) => {
             state.isInitialized = action.payload.isInitialized
         })
     }

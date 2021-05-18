@@ -14,11 +14,11 @@ import {Menu} from "@material-ui/icons";
 import {TodoLists} from "../features/Todolists/TodoLists";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
-import {initializeApp, RequestStatusType} from "./app-reducer";
+import {initializeAppTC, RequestStatusType} from "./app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Login} from "../features/Login/Login";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {logout} from "../features/Login/authReducer";
+import {logoutTC} from "../features/Login/authReducer";
 
 
 type AppPropsType = {
@@ -34,7 +34,7 @@ export const App: React.FC<AppPropsType> = ({demo = false}) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(initializeApp())
+        dispatch(initializeAppTC())
     }, [])
 
     const logout = () => {

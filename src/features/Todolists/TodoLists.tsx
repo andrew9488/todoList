@@ -9,7 +9,7 @@ import {
 } from "./todolists-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../app/store";
-import {addTask, TasksStateType, updateTask} from "./tasks-reducer";
+import {addTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from "./tasks-reducer";
 import React, {useCallback, useEffect} from "react";
 import {TaskStatuses} from "../../api/todolist-api";
 import {Grid, Paper} from "@material-ui/core";
@@ -37,16 +37,16 @@ export const TodoLists: React.FC<TodoListsPropsType> = ({demo = false}) => {
     }, [])
 
     const removeTask = useCallback((taskId: string, todoListId: string) => { // функция удаления таски
-        dispatch(removeTask( taskId, todoListId))
+        dispatch(removeTaskTC({taskId, todoListId}))
     }, [dispatch])
     const addTask = useCallback((taskTitle: string, todoListId: string) => { //функция добавления таски
-        dispatch(addTask(todoListId, taskTitle))
+        dispatch(addTaskTC({todoListId, title: taskTitle}))
     }, [dispatch])
     const changeTaskTitle = useCallback((taskId: string, title: string, todoListId: string) => {
-        dispatch(updateTask({taskId, model: {title}, todoListId}))
+        dispatch(updateTaskTC({taskId, model: {title}, todoListId}))
     }, [dispatch])
     const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses, todoListId: string) => {
-        dispatch(updateTask({taskId, model: {status}, todoListId}))
+        dispatch(updateTaskTC({taskId, model: {status}, todoListId}))
     }, [dispatch])
 
     const removeTodoList = useCallback((todoListId: string) => {
@@ -59,7 +59,7 @@ export const TodoLists: React.FC<TodoListsPropsType> = ({demo = false}) => {
         dispatch(changeFilterTodoListAC({id: todoListId, filter: newFilterValue}))
     }, [dispatch])
     const changeTodoListTitle = useCallback((newTitle: string, todoListId: string) => {
-        dispatch(changeTodoListTitleTC(todoListId, newTitle))
+        dispatch(changeTodoListTitleTC({todoListId, title: newTitle}))
     }, [dispatch])
 
     if (!isLoggedIn) {
