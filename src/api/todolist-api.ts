@@ -44,8 +44,9 @@ export type UpdateTaskModelType = {
     deadline: string
 }
 
+export type FieldsErrorsType = { field: string, error: string };
 export type ResponseType<D = {}> = {
-    fieldsErrors: string[]
+    fieldsErrors: Array<FieldsErrorsType>
     messages: string[]
     resultCode: number
     data: D

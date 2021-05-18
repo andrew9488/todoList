@@ -6,7 +6,7 @@ import {Delete} from "@material-ui/icons";
 import {Task} from "./Task/Task";
 import {TaskStatuses} from "../../../api/todolist-api";
 import {FilterValuesType, TodoListDomainType} from "../todolists-reducer";
-import {fetchTaskTC, TaskDomainType} from "../tasks-reducer";
+import {fetchTasks, TaskDomainType} from "../tasks-reducer";
 import {useDispatch} from "react-redux";
 
 type TodoListPropsType = {
@@ -30,7 +30,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
         if (demo) {
             return;
         }
-        dispatch(fetchTaskTC(props.todoList.id))
+        dispatch(fetchTasks(props.todoList.id))
     }, [])
 
     let allTaskForTodoList = props.tasks

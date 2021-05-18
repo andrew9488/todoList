@@ -1,10 +1,17 @@
 import React from 'react'
-import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
-import {useFormik} from "formik";
+import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@material-ui/core'
+import {FormikHelpers, useFormik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
-import {loginTC} from "./authReducer";
-import {AppRootStateType} from "../../app/store";
+import {login} from "./authReducer";
+import {AppDispatchType, AppRootStateType} from "../../app/store";
 import {Redirect} from "react-router-dom";
+
+type FormValuesType = {
+    email: string
+    password: string
+    rememberMe: boolean
+}
+
 
 type FormikErrorType = {
     email?: string
@@ -15,7 +22,7 @@ type FormikErrorType = {
 export const Login: React.FC = () => {
 
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
-    const dispatch = useDispatch()
+    const dispatch:AppDispatchType = useDispatch()
 
     const formik = useFormik({
         initialValues: {
@@ -39,9 +46,14 @@ export const Login: React.FC = () => {
 
             return errors;
         },
-        onSubmit: values => {
-            dispatch(loginTC(values))
-            formik.resetForm()
+        onSubmit: async (values, formikHelpers: FormikHelpers<FormValuesType>) => {
+            const action = await dispatch(login(values))
+            if(login.rejected.match(action)){
+                if(action.payload?.fieldsError?.length){
+                    const error = action.payload?.fieldsError[0]
+                formikHelpers.setFieldError(error.field, error.error)
+                }
+            }
         },
     });
 
@@ -56,7 +68,7 @@ export const Login: React.FC = () => {
                     <FormLabel>
                         <p>To log in get registered
                             <a href={'https://social-network.samuraijs.com/'}
-                               target={'_blank'}  rel="noopener noreferrer"> here
+                               target={'_blank'} rel="noopener noreferrer"> here
                             </a>
                         </p>
                         <p>or use common test account credentials:</p>

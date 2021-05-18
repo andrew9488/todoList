@@ -28,3 +28,5 @@ export type AppThunkType = ThunkAction<void, AppRootStateType, unknown, ActionsT
 // а это, чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore
 window.store = store;
+
+export type AppDispatchType = typeof store.dispatch
