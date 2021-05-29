@@ -53,7 +53,6 @@ export const slice = createSlice({
     }
 })
 
-export const appReducer = slice.reducer
 export const {setAppStatusAC, setAppErrorAC} = slice.actions
 
 

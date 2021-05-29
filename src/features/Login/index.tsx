@@ -9,8 +9,10 @@ const authActions = {
 
 }
 
+const authReducer = slice.reducer
 export {
     authSelectors,
     authActions,
+    authReducer,
     Login
 }

@@ -5,11 +5,10 @@ import {TasksStateType} from "../Task/tasks-reducer";
 import React, {useEffect} from "react";
 import {Grid, Paper} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
-import {TodoList} from "./index";
 import {Redirect} from "react-router-dom";
 import {authSelectors} from "../Login/";
-import {todoListsActions, todoListSelectors} from "./index";
-import {tasksSectors} from "../Task";
+import {todoListsActions, todoListSelectors,TodoList} from "./index";
+import {tasksSelectors} from "../Task";
 
 type TodoListsPropsType = {
     demo?: boolean
@@ -18,7 +17,7 @@ type TodoListsPropsType = {
 export const TodoLists: React.FC<TodoListsPropsType> = ({demo = false}) => {
 
     let todoLists: Array<TodoListDomainType> = useSelector(todoListSelectors.todoListsSelector)
-    let tasks: TasksStateType = useSelector(tasksSectors.tasksSelector)
+    let tasks: TasksStateType = useSelector(tasksSelectors.tasksSelector)
     const isLoggedIn = useSelector(authSelectors.isLoggedInSelector)
 
     const {fetchTodoListsTC, addTodoListTC} = useActions(todoListsActions)

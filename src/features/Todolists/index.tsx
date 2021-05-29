@@ -9,9 +9,13 @@ const todoListsActions = {
     ...slice.actions
 }
 
+
+const todoListsReducer = slice.reducer
+
 export {
     todoListSelectors,
     todoListsActions,
+    todoListsReducer,
     TodoLists,
     TodoList
 }

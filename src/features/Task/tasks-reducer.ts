@@ -3,7 +3,7 @@ import {RequestStatusType, setAppStatusAC} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/utils-error";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppRootStateType} from "../../bll/store";
-import {todoListsActions} from "../Todolists";
+import { todoListsActions } from "../Todolists";
 
 type ChangeTasksEntityStatusActionType = ReturnType<typeof changeTasksEntityStatusAC>
 
@@ -164,5 +164,4 @@ export const slice = createSlice({
     }
 })
 
-export const tasksReducer = slice.reducer
 export const {changeTasksEntityStatusAC} = slice.actions
