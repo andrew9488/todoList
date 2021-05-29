@@ -6,7 +6,7 @@ import {Delete} from "@material-ui/icons";
 import {Task} from "./Task/Task";
 import {TaskStatuses} from "../../../api/todolist-api";
 import {FilterValuesType, TodoListDomainType} from "../todolists-reducer";
-import {fetchTasksTC, TaskDomainType} from "../tasks-reducer";
+import {fetchTasksTC, TaskDomainType} from "./Task/tasks-reducer";
 import {useDispatch} from "react-redux";
 
 type TodoListPropsType = {

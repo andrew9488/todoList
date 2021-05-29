@@ -9,13 +9,16 @@ import {
 } from "./todolists-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../app/store";
-import {addTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from "./tasks-reducer";
+import {addTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from "./Todolist/Task/tasks-reducer";
 import React, {useCallback, useEffect} from "react";
 import {TaskStatuses} from "../../api/todolist-api";
 import {Grid, Paper} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./Todolist/TodoList";
 import {Redirect} from "react-router-dom";
+import {isLoggedInSelector} from "../Login/selectors";
+import {todoListsSelector} from "./selectors";
+import {tasksSelector} from "./Todolist/Task/selectors";
 
 type TodoListsPropsType = {
     demo?: boolean
@@ -23,9 +26,9 @@ type TodoListsPropsType = {
 
 export const TodoLists: React.FC<TodoListsPropsType> = ({demo = false}) => {
 
-    let todoLists: Array<TodoListDomainType> = useSelector<AppRootStateType, Array<TodoListDomainType>>(state => state.todoLists)
-    let tasks: TasksStateType = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+    let todoLists: Array<TodoListDomainType> = useSelector(todoListsSelector)
+    let tasks: TasksStateType = useSelector(tasksSelector)
+    const isLoggedIn = useSelector(isLoggedInSelector)
 
     const dispatch = useDispatch()
 
