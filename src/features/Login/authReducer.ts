@@ -11,7 +11,7 @@ const initialState = {
     isLoggedIn: false
 }
 
-export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType,
+const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType,
     { rejectValue: { errors: Array<string>, fieldsError: Array<FieldsErrorsType> } }>("auth/login", async (payload, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: "loading"}))
     try {
@@ -29,7 +29,7 @@ export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType
     }
 })
 
-export const logoutTC = createAsyncThunk("auth/logout", async (payload, thunkAPI) => {
+const logoutTC = createAsyncThunk("auth/logout", async (payload, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: "loading"}))
     try {
         const response = await authAPI.logout()
@@ -46,7 +46,12 @@ export const logoutTC = createAsyncThunk("auth/logout", async (payload, thunkAPI
     }
 })
 
-const slice = createSlice({
+export const asyncActions = {
+    loginTC,
+    logoutTC
+}
+
+export const slice = createSlice({
     name: "auth",
     initialState: initialState,
     reducers: {

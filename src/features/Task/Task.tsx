@@ -1,21 +1,21 @@
 import React, {ChangeEvent, useCallback} from "react";
 import {Checkbox, IconButton} from "@material-ui/core";
-import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
+import {EditableSpan} from "../../components/EditableSpan/EditableSpan";
 import {Delete} from "@material-ui/icons";
-import {TaskStatuses, TaskType} from "../../../../api/todolist-api";
+import {TaskStatuses, TaskType} from "../../api/todolist-api";
 
 export type TaskPropsType = {
     task: TaskType
     todoListId: string
     changeTaskStatus: (taskId: string, status: TaskStatuses, todoListId: string) => void
     changeTaskTitle: (taskId: string, title: string, todoListId: string) => void
-    removeTask: (taskId: string, todoListId: string) => void
+    removeTask: ( taskId: string, todoListId: string ) => void
     disabled: boolean
 }
 
 export const Task: React.FC<TaskPropsType> = React.memo((props) => {
 
-    const removeTask = () => props.removeTask(props.task.id, props.todoListId)
+    const removeTask = () => props.removeTask( props.task.id, props.todoListId)
 
     const changeStatus = (e: ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(props.task.id,
         e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New, props.todoListId)

@@ -2,14 +2,14 @@ import React, {useEffect} from 'react';
 import './App.css';
 import {AppBar, Button, CircularProgress, Container, IconButton, LinearProgress, Toolbar} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
-import {TodoLists} from "../features/Todolists/TodoLists";
-import {useDispatch, useSelector} from "react-redux";
-import {initializeAppTC} from "./app-reducer";
+import {TodoLists} from "../features/Todolists";
+import {useSelector} from "react-redux";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
-import {Login} from "../features/Login/Login";
+import {Login} from "../features/Login";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {appStatusSelector, isInitializedSelector} from "./selectors";
-import {isLoggedInSelector} from "../features/Login/selectors";
+import {appActions, appSelectors} from "./index";
+import {authActions, authSelectors} from "../features/Login";
+import {useActions} from "../bll/store";
 
 
 type AppPropsType = {
@@ -18,17 +18,18 @@ type AppPropsType = {
 
 export const App: React.FC<AppPropsType> = ({demo = false}) => {
 
-    const isInitialized = useSelector(isInitializedSelector)
-    const appStatus = useSelector(appStatusSelector)
-    const isLoggedIn = useSelector(isLoggedInSelector)
-    const dispatch = useDispatch()
+    const isInitialized = useSelector(appSelectors.isInitializedSelector)
+    const appStatus = useSelector(appSelectors.appStatusSelector)
+    const isLoggedIn = useSelector(authSelectors.isLoggedInSelector)
+    const {initializeAppTC} = useActions(appActions)
+    const {logoutTC} = useActions(authActions)
 
     useEffect(() => {
-        dispatch(initializeAppTC())
+        initializeAppTC()
     }, [])
 
-    const logOut = () => {
-        dispatch(logout())
+    const logout = () => {
+        logoutTC()
     }
 
     if (!isInitialized) {
@@ -46,7 +47,7 @@ export const App: React.FC<AppPropsType> = ({demo = false}) => {
                     <IconButton edge="start" color="inherit" aria-label="menu">
                         <Menu/>
                     </IconButton>
-                    {isLoggedIn && <Button color="inherit" onClick={logOut}>Logout</Button>}
+                    {isLoggedIn && <Button color="inherit" onClick={logout}>Logout</Button>}
                 </Toolbar>
                 {appStatus === "loading" && <LinearProgress color="secondary"/>}
             </AppBar>

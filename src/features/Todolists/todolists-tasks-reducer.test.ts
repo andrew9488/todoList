@@ -1,4 +1,4 @@
-import {tasksReducer, TasksStateType} from "./Todolist/Task/tasks-reducer";
+import {tasksReducer, TasksStateType} from "../Task/tasks-reducer";
 import {
     addTodoListTC,
     fetchTodoListsTC,
