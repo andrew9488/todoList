@@ -40,10 +40,10 @@ export const App: React.FC<AppPropsType> = ({demo = false}) => {
     }
 
     return (
-        <div className="App">
+        <div className="App" >
             <AppBar position="static">
                 <ErrorSnackbar/>
-                <Toolbar>
+                <Toolbar >
                     <IconButton edge="start" color="inherit" aria-label="menu">
                         <Menu/>
                     </IconButton>

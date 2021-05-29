@@ -50,7 +50,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({addItem,
                 error={!!error}
                 disabled={disabled}
             />
-            <IconButton onClick={addItemHandler} color="primary" disabled={disabled}>
+            <IconButton  onClick={addItemHandler} color="primary" disabled={disabled} style={{marginLeft: "14px"}}>
                 <AddBox/>
             </IconButton>
         </div>

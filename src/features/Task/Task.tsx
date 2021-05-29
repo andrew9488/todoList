@@ -33,15 +33,16 @@ export const Task: React.FC<TaskPropsType> = React.memo((props) => {
     }, [props.task.id, props.todoListId])
 
     return (
-        <div>
+        <div style={{position: "relative"}}>
             <li className={props.task.status === TaskStatuses.Completed ? "is-done" : ""}>
                 <Checkbox
                     color={"secondary"}
                     checked={props.task.status === TaskStatuses.Completed}
                     onChange={changeTaskStatus}/>
                 <EditableSpan title={props.task.title} changeItem={changeTaskTitle} disabled={props.disabled}/>
-                <IconButton onClick={removeTask} disabled={props.disabled}>
-                    <Delete/>
+                <IconButton onClick={removeTask} disabled={props.disabled}
+                            style={{position: "absolute", right: "2px", top: "0"}}>
+                    <Delete fontSize={"small"}/>
                 </IconButton>
             </li>
         </div>

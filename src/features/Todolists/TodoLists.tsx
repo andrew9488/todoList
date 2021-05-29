@@ -7,7 +7,7 @@ import {Grid, Paper} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Redirect} from "react-router-dom";
 import {authSelectors} from "../Login/";
-import {todoListsActions, todoListSelectors,TodoList} from "./index";
+import {todoListsActions, todoListSelectors, TodoList} from "./index";
 import {tasksSelectors} from "../Task";
 
 type TodoListsPropsType = {
@@ -36,25 +36,24 @@ export const TodoLists: React.FC<TodoListsPropsType> = ({demo = false}) => {
     return (
         <>
             <Grid container style={{padding: "10px 0"}}>
-                <Paper style={{padding: "5px"}}
+                <Paper style={{padding: "10px", width: "280px"}}
                        elevation={3}>
                     <AddItemForm addItem={addTodoListTC} title={"TodoList title"}/>
                 </Paper>
             </Grid>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} style={{flexWrap: "nowrap", overflowX: "scroll"}}>
                 {
                     todoLists.map(tl => {
                         let allTaskTodoList = tasks[tl.id]
                         return (
                             <Grid item key={tl.id}>
-                                <Paper style={{padding: "7px"}}
-                                       elevation={3}>
+                                <div style={{width: "300px"}}>
                                     <TodoList
                                         todoList={tl}
                                         tasks={allTaskTodoList}
                                         demo={demo}
                                     />
-                                </Paper>
+                                </div>
                             </Grid>
                         );
                     })

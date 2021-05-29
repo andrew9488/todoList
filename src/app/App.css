@@ -1,13 +1,7 @@
-/*
 .App {
-  padding: 30px;
-  display: flex;
-}
+  height: 100vh;
 
-.App > div {
-  margin-right: 50px;
 }
-*/
 
 .is-done {
   opacity: 0.6;
