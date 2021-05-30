@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from "react";
-import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {AddItemForm, AddItemFormSubmitHelperType} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, IconButton, Paper} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
@@ -9,6 +9,7 @@ import {TaskDomainType} from "../../Task/tasks-reducer";
 import {useActions} from "../../../bll/store";
 import {todoListsActions} from "../index";
 import {tasksActions, Task} from "../../Task";
+import {useDispatch} from "react-redux";
 
 type TodoListPropsType = {
     todoList: TodoListDomainType
@@ -19,7 +20,8 @@ type TodoListPropsType = {
 export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, ...props}) => {
 
     const {changeTodoListTitleTC, removeTodoListTC, changeFilterTodoListAC} = useActions(todoListsActions)
-    const {fetchTasksTC, addTaskTC} = useActions(tasksActions)
+    const {fetchTasksTC} = useActions(tasksActions)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (demo) {
@@ -52,8 +54,20 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
     const completed = useCallback(() =>
         changeFilterTodoListAC({id: props.todoList.id, filter: "completed"}), [props.todoList.id])
 
-    const addTask = useCallback((title: string) =>
-        addTaskTC({title: title, todoListId: props.todoList.id}), [props.todoList.id])
+    const addTask = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
+        let thunk = tasksActions.addTaskTC({title, todoListId: props.todoList.id})
+        const action: any = await dispatch(thunk)
+        if (tasksActions.addTaskTC.rejected.match(action)) {
+            if (action.payload?.errors?.length) {
+                const error = action.payload?.errors[0]
+                helper.setError(error)
+            } else {
+                helper.setError("Some error")
+            }
+        } else {
+            helper.setValue("")
+        }
+    }, [props.todoList.id])
 
     const tasks = taskForTodoList.map(t => {
         return (
@@ -77,7 +91,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
                 {!tasks.length && <span style={{color: "gray", marginLeft: "15px"}}>No tasks</span>}
                 {tasks}
             </ul>
-            <div>
+            <div style={{display: "flex", justifyContent: "space-evenly"}}>
                 <Button
                     color={props.todoList.filter === "all" ? "secondary" : "primary"}
                     variant={"contained"}

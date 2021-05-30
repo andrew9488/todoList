@@ -1,10 +1,10 @@
 import {TodoListDomainType} from "./todolists-reducer";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useActions} from "../../bll/store";
 import {TasksStateType} from "../Task/tasks-reducer";
-import React, {useEffect} from "react";
+import React, {useCallback, useEffect} from "react";
 import {Grid, Paper} from "@material-ui/core";
-import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
+import {AddItemForm, AddItemFormSubmitHelperType} from "../../components/AddItemForm/AddItemForm";
 import {Redirect} from "react-router-dom";
 import {authSelectors} from "../Login/";
 import {todoListsActions, todoListSelectors, TodoList} from "./index";
@@ -19,14 +19,30 @@ export const TodoLists: React.FC<TodoListsPropsType> = ({demo = false}) => {
     let todoLists: Array<TodoListDomainType> = useSelector(todoListSelectors.todoListsSelector)
     let tasks: TasksStateType = useSelector(tasksSelectors.tasksSelector)
     const isLoggedIn = useSelector(authSelectors.isLoggedInSelector)
+    const dispatch = useDispatch()
 
-    const {fetchTodoListsTC, addTodoListTC} = useActions(todoListsActions)
+    const {fetchTodoListsTC} = useActions(todoListsActions)
 
     useEffect(() => {
         if (demo || !isLoggedIn) {
             return;
         }
         fetchTodoListsTC()
+    }, [])
+
+    const addTodoList = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
+        const thunk = todoListsActions.addTodoListTC(title)
+        const action: any = await dispatch(thunk)
+        if (todoListsActions.addTodoListTC.rejected.match(action)) {
+            if (action.payload?.errors?.length) {
+                const error = action.payload?.errors[0]
+                helper.setError(error)
+            } else {
+                helper.setError("Some error")
+            }
+        } else {
+            helper.setValue("")
+        }
     }, [])
 
     if (!isLoggedIn) {
@@ -38,7 +54,7 @@ export const TodoLists: React.FC<TodoListsPropsType> = ({demo = false}) => {
             <Grid container style={{padding: "10px 0"}}>
                 <Paper style={{padding: "10px", width: "280px"}}
                        elevation={3}>
-                    <AddItemForm addItem={addTodoListTC} title={"TodoList title"}/>
+                    <AddItemForm addItem={addTodoList} title={"TodoList title"}/>
                 </Paper>
             </Grid>
             <Grid container spacing={3} style={{flexWrap: "nowrap", overflowX: "scroll"}}>

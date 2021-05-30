@@ -1,5 +1,5 @@
 import {authAPI} from "../api/todolist-api";
-import {handleServerAppError, handleServerNetworkError} from "../utils/utils-error";
+import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../utils/utils-error";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {setIsLoggedInAC} from "../features/Login/authReducer";
 
@@ -21,13 +21,11 @@ const initializeAppTC = createAsyncThunk("app/initializeApp", async (payload, th
             thunkAPI.dispatch(setIsLoggedInAC({isLoggedIn: true}));
             thunkAPI.dispatch(setAppStatusAC({status: "succeeded"}))
         } else {
-            handleServerAppError(response.data, thunkAPI.dispatch)
-            return thunkAPI.rejectWithValue({errors: response.data.messages, fieldsError: response.data.fieldsErrors})
+            return handleAsyncServerAppError(response.data, thunkAPI)
         }
         return {isInitialized: true}
     } catch (error) {
-        handleServerNetworkError(error, thunkAPI.dispatch)
-        return thunkAPI.rejectWithValue(error)
+        return handleAsyncServerNetworkError(error, thunkAPI)
     }
 })
 

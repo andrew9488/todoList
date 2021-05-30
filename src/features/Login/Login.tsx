@@ -1,7 +1,7 @@
 import React from 'react'
 import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@material-ui/core'
 import {FormikHelpers, useFormik} from "formik";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Redirect} from "react-router-dom";
 import {authActions, authSelectors} from "./index"
 import {useActions} from "../../bll/store";
@@ -22,7 +22,9 @@ type FormikErrorType = {
 export const Login: React.FC = () => {
 
     const isLoggedIn = useSelector(authSelectors.isLoggedInSelector)
-    const {loginTC} = useActions(authActions)
+    const {} = useActions(authActions)
+    const dispatch = useDispatch()
+
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -42,14 +44,14 @@ export const Login: React.FC = () => {
             } else if (values.password.length < 3) {
                 errors.password = 'Must be 3 characters or more';
             }
-
             return errors;
         },
         onSubmit: async (values, formikHelpers: FormikHelpers<FormValuesType>) => {
-            const action: any = await loginTC(values)
-            if (loginTC.rejected.match(action)) {
-                if (action.payload?.fieldsError?.length) {
-                    const error = action.payload?.fieldsError[0]
+            const thunk = authActions.loginTC(values)
+            const action: any = await dispatch(thunk)
+            if (authActions.loginTC.rejected.match(action)) {
+                if (action.payload?.fieldsErrors?.length) {
+                    const error = action.payload?.fieldsErrors[0]
                     formikHelpers.setFieldError(error.field, error.error)
                 }
             }

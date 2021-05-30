@@ -2,8 +2,13 @@ import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {IconButton, TextField} from "@material-ui/core";
 import {AddBox} from "@material-ui/icons";
 
+export type AddItemFormSubmitHelperType = {
+    setError: (error: string) => void
+    setValue: (value: string) => void
+}
+
 export type AddItemFormPropsType = {
-    addItem: (title: string) => void
+    addItem: (title: string, helper: AddItemFormSubmitHelperType) => void
     title: string
     disabled?: boolean
 }
@@ -25,32 +30,34 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({addItem,
         if (e.key === "Enter") addItemHandler()
     }
 
-    const addItemHandler = () => {
+    const addItemHandler = async () => {
         const trimmedTitle = value.trim()
-        if (trimmedTitle) {
-            addItem(trimmedTitle)
+        if (trimmedTitle !== "") {
+            addItem(trimmedTitle, {setError, setValue})
         } else {
             setError("Title is required!")
         }
-        setValue("")
     }
 
     return (
-        <div>
-            <TextField
-                variant={"outlined"}
-                value={value}
-                onChange={onChangeTitleItemHandler}
-                onKeyPress={onKeyPressHandler}
-                onBlur={() => {
-                    setError(null)
-                }}
-                helperText={error ? "Title is required!" : ""}
-                label={title}
-                error={!!error}
-                disabled={disabled}
-            />
-            <IconButton  onClick={addItemHandler} color="primary" disabled={disabled} style={{marginLeft: "14px"}}>
+        <div style={{display: "flex", alignItems: "center", position: "relative"}}>
+            <div style={{width: "218px"}}>
+                <TextField
+                    variant={"outlined"}
+                    value={value}
+                    onChange={onChangeTitleItemHandler}
+                    onKeyPress={onKeyPressHandler}
+                    onBlur={() => {
+                        setError(null)
+                    }}
+                    helperText={error}
+                    label={title}
+                    error={!!error}
+                    disabled={disabled}
+                />
+            </div>
+            <IconButton onClick={addItemHandler} color="primary" disabled={disabled}
+                        style={{marginLeft: "14px", position: "absolute", right:"0px", top:"0px"}}>
                 <AddBox/>
             </IconButton>
         </div>

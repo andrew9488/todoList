@@ -1,13 +1,9 @@
 import {TaskPriorities, TaskStatuses, TaskType, todoListsApi} from "../../api/todolist-api";
 import {RequestStatusType, setAppStatusAC} from "../../app/app-reducer";
-import {handleServerAppError, handleServerNetworkError} from "../../utils/utils-error";
+import {handleAsyncServerAppError, handleAsyncServerNetworkError, ThunkError} from "../../utils/utils-error";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppRootStateType} from "../../bll/store";
-import { todoListsActions } from "../Todolists";
-
-type ChangeTasksEntityStatusActionType = ReturnType<typeof changeTasksEntityStatusAC>
-
-export type TasksActionsType = ChangeTasksEntityStatusActionType
+import {todoListsActions} from "../Todolists";
 
 type UpdateTaskDomainModelType = {
     title?: string
@@ -19,22 +15,18 @@ type UpdateTaskDomainModelType = {
 }
 
 export type TaskDomainType = TaskType & { entityStatus: RequestStatusType }
-
-export type TasksStateType = {
-    [key: string]: Array<TaskDomainType>
-}
-
+export type TasksStateType = { [key: string]: Array<TaskDomainType> }
 const initialState: TasksStateType = {}
 
-const fetchTasksTC = createAsyncThunk("tasks/fetchTasks", async (todoListId: string, thunkAPI) => {
+const fetchTasksTC = createAsyncThunk<{ todoListId: string, tasks: Array<TaskType> }, string, ThunkError>
+("tasks/fetchTasks", async (todoListId: string, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: "loading"}))
     try {
         const response = await todoListsApi.getTasks(todoListId)
         thunkAPI.dispatch(setAppStatusAC({status: "succeeded"}))
         return {todoListId, tasks: response.data.items}
     } catch (error) {
-        handleServerNetworkError(error, thunkAPI.dispatch)
-        return thunkAPI.rejectWithValue(error)
+        return handleAsyncServerNetworkError(error, thunkAPI)
     }
 })
 const removeTaskTC = createAsyncThunk("tasks/removeTask", async (payload: { todoListId: string, taskId: string }, thunkAPI) => {
@@ -50,38 +42,34 @@ const removeTaskTC = createAsyncThunk("tasks/removeTask", async (payload: { todo
             thunkAPI.dispatch(setAppStatusAC({status: "succeeded"}))
             return {taskId: payload.taskId, todoListId: payload.todoListId}
         } else {
-            handleServerAppError(response.data, thunkAPI.dispatch)
-            return thunkAPI.rejectWithValue({errors: response.data.messages, fieldsError: response.data.fieldsErrors})
+            return handleAsyncServerAppError(response.data, thunkAPI)
         }
     } catch (error) {
-        handleServerNetworkError(error, thunkAPI.dispatch)
-        return thunkAPI.rejectWithValue(error)
+        return handleAsyncServerNetworkError(error, thunkAPI)
     }
 })
-const addTaskTC = createAsyncThunk("tasks/addTask", async (payload: { todoListId: string, title: string }, thunkAPI) => {
-    thunkAPI.dispatch(setAppStatusAC({status: "loading"}))
-    try {
-        const response = await todoListsApi.createTask(payload.todoListId, payload.title)
-        if (response.data.resultCode === 0) {
-            thunkAPI.dispatch(setAppStatusAC({status: "succeeded"}))
-            return {task: response.data.data.item}
-
-        } else {
-            handleServerAppError(response.data, thunkAPI.dispatch)
-            return thunkAPI.rejectWithValue({errors: response.data.messages, fieldsError: response.data.fieldsErrors})
+const addTaskTC = createAsyncThunk<{ task: TaskType }, { title: string, todoListId: string }, ThunkError>("tasks/addTask",
+    async (payload, thunkAPI) => {
+        thunkAPI.dispatch(setAppStatusAC({status: "loading"}))
+        try {
+            const response = await todoListsApi.createTask(payload.todoListId, payload.title)
+            if (response.data.resultCode === 0) {
+                thunkAPI.dispatch(setAppStatusAC({status: "succeeded"}))
+                return {task: response.data.data.item}
+            } else {
+                return handleAsyncServerAppError(response.data, thunkAPI, false)
+            }
+        } catch (error) {
+            return handleAsyncServerNetworkError(error, thunkAPI)
         }
-    } catch (error) {
-        handleServerNetworkError(error, thunkAPI.dispatch)
-        return thunkAPI.rejectWithValue(error)
-    }
-})
+    })
 const updateTaskTC = createAsyncThunk("tasks/updateTask", async (payload: { taskId: string, model: UpdateTaskDomainModelType, todoListId: string },
-                                                                 {dispatch, getState, rejectWithValue}) => {
-    dispatch(setAppStatusAC({status: "loading"}))
-    const state = getState() as AppRootStateType
+                                                                 thunkAPI) => {
+    thunkAPI.dispatch(setAppStatusAC({status: "loading"}))
+    const state = thunkAPI.getState() as AppRootStateType
     const currentTask = state.tasks[payload.todoListId].find(t => t.id === payload.taskId)
     if (!currentTask) {
-        return rejectWithValue("error")
+        return thunkAPI.rejectWithValue("error")
     }
 
     const apiModel = {
@@ -96,26 +84,15 @@ const updateTaskTC = createAsyncThunk("tasks/updateTask", async (payload: { task
     try {
         const response = await todoListsApi.updateTask(payload.todoListId, payload.taskId, apiModel)
         if (response.data.resultCode === 0) {
-            dispatch(setAppStatusAC({status: "succeeded"}))
+            thunkAPI.dispatch(setAppStatusAC({status: "succeeded"}))
             return {taskId: payload.taskId, model: payload.model, todoListId: payload.todoListId}
         } else {
-            handleServerAppError(response.data, dispatch)
-            return rejectWithValue({
-                errors: response.data.messages,
-                fieldsError: response.data.fieldsErrors
-            })
+            return handleAsyncServerAppError(response.data, thunkAPI)
         }
     } catch (error) {
-        handleServerNetworkError(error, dispatch)
-        return rejectWithValue(error)
+        return handleAsyncServerNetworkError(error, thunkAPI)
     }
 })
-export const asyncActions = {
-    fetchTasksTC,
-    removeTaskTC,
-    addTaskTC,
-    updateTaskTC
-}
 
 export const slice = createSlice({
     name: "tasks",
@@ -165,3 +142,4 @@ export const slice = createSlice({
 })
 
 export const {changeTasksEntityStatusAC} = slice.actions
+export const asyncActions = {fetchTasksTC, removeTaskTC, addTaskTC, updateTaskTC}
