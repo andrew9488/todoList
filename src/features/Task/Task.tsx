@@ -4,7 +4,7 @@ import {EditableSpan} from "../../components/EditableSpan/EditableSpan";
 import {Delete} from "@material-ui/icons";
 import {TaskStatuses, TaskType} from "../../api/todolist-api";
 import {tasksActions} from "./index";
-import {useActions} from "../../bll/store";
+import {useActions} from "../../utils/utils-redux";
 
 
 export type TaskPropsType = {
@@ -15,22 +15,22 @@ export type TaskPropsType = {
 
 export const Task: React.FC<TaskPropsType> = React.memo((props) => {
 
-    const {updateTaskTC, removeTaskTC} = useActions(tasksActions)
+    const {updateTask, removeTask} = useActions(tasksActions)
 
-    const removeTask = useCallback(() => removeTaskTC({
+    const removeTaskCallback = useCallback(() => removeTask({
         taskId: props.task.id,
         todoListId: props.todoListId
-    }), [props.task.id, props.todoListId])
+    }), [props.task.id, props.todoListId, removeTask])
 
-    const changeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => updateTaskTC({
+    const changeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => updateTask({
         taskId: props.task.id,
         model: {status: e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New},
         todoListId: props.todoListId
-    }), [props.task.id, props.todoListId])
+    }), [props.task.id, props.todoListId, updateTask])
 
     const changeTaskTitle = useCallback((newTitle: string) => {
-        updateTaskTC({taskId: props.task.id, model: {title: newTitle}, todoListId: props.todoListId})
-    }, [props.task.id, props.todoListId])
+        updateTask({taskId: props.task.id, model: {title: newTitle}, todoListId: props.todoListId})
+    }, [props.task.id, props.todoListId, updateTask])
 
     return (
         <div style={{position: "relative"}}>
@@ -40,7 +40,7 @@ export const Task: React.FC<TaskPropsType> = React.memo((props) => {
                     checked={props.task.status === TaskStatuses.Completed}
                     onChange={changeTaskStatus}/>
                 <EditableSpan title={props.task.title} changeItem={changeTaskTitle} disabled={props.disabled}/>
-                <IconButton onClick={removeTask} disabled={props.disabled}
+                <IconButton onClick={removeTaskCallback} disabled={props.disabled}
                             style={{position: "absolute", right: "2px", top: "0"}}>
                     <Delete fontSize={"small"}/>
                 </IconButton>

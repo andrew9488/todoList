@@ -27,7 +27,10 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({addItem,
         if (error !== null) {
             setError(null)
         }
-        if (e.key === "Enter") addItemHandler()
+        if (e.key === "Enter") {
+            addItemHandler()
+                .then()
+        }
     }
 
     const addItemHandler = async () => {

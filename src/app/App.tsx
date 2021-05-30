@@ -7,9 +7,9 @@ import {useSelector} from "react-redux";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Login} from "../features/Login";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {appActions, appSelectors} from "./index";
 import {authActions, authSelectors} from "../features/Login";
-import {useActions} from "../bll/store";
+import {appActions, appSelectors} from "../features/Application";
+import {useActions} from "../utils/utils-redux";
 
 
 type AppPropsType = {
@@ -21,15 +21,15 @@ export const App: React.FC<AppPropsType> = ({demo = false}) => {
     const isInitialized = useSelector(appSelectors.isInitializedSelector)
     const appStatus = useSelector(appSelectors.appStatusSelector)
     const isLoggedIn = useSelector(authSelectors.isLoggedInSelector)
-    const {initializeAppTC} = useActions(appActions)
-    const {logoutTC} = useActions(authActions)
+    const {initializeApp} = useActions(appActions)
+    const {logout} = useActions(authActions)
 
     useEffect(() => {
-        initializeAppTC()
+        initializeApp()
     }, [])
 
-    const logout = () => {
-        logoutTC()
+    const logoutCallback = () => {
+        logout()
     }
 
     if (!isInitialized) {
@@ -40,14 +40,14 @@ export const App: React.FC<AppPropsType> = ({demo = false}) => {
     }
 
     return (
-        <div className="App" >
+        <div className="App">
             <AppBar position="static">
                 <ErrorSnackbar/>
-                <Toolbar >
+                <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
                         <Menu/>
                     </IconButton>
-                    {isLoggedIn && <Button color="inherit" onClick={logout}>Logout</Button>}
+                    {isLoggedIn && <Button color="inherit" onClick={logoutCallback}>Logout</Button>}
                 </Toolbar>
                 {appStatus === "loading" && <LinearProgress color="secondary"/>}
             </AppBar>

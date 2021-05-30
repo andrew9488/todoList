@@ -1,6 +1,7 @@
 import * as appSelectors from "./selectors";
-import {asyncActions as appAsyncActions} from "./app-reducer"
-import {slice} from "./app-reducer"
+import {slice} from "./application-reducer"
+import {asyncActions as appAsyncActions} from "./application-reducer"
+
 
 const appActions = {
     ...appAsyncActions,

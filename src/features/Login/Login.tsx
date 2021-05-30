@@ -1,17 +1,16 @@
 import React from 'react'
 import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@material-ui/core'
 import {FormikHelpers, useFormik} from "formik";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {Redirect} from "react-router-dom";
 import {authActions, authSelectors} from "./index"
-import {useActions} from "../../bll/store";
+import {useAppDispatch} from "../../utils/utils-redux";
 
 type FormValuesType = {
     email: string
     password: string
     rememberMe: boolean
 }
-
 
 type FormikErrorType = {
     email?: string
@@ -22,8 +21,7 @@ type FormikErrorType = {
 export const Login: React.FC = () => {
 
     const isLoggedIn = useSelector(authSelectors.isLoggedInSelector)
-    const {} = useActions(authActions)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const formik = useFormik({
         initialValues: {
@@ -47,9 +45,9 @@ export const Login: React.FC = () => {
             return errors;
         },
         onSubmit: async (values, formikHelpers: FormikHelpers<FormValuesType>) => {
-            const thunk = authActions.loginTC(values)
-            const action: any = await dispatch(thunk)
-            if (authActions.loginTC.rejected.match(action)) {
+            const thunk = authActions.login(values)
+            const action = await dispatch(thunk)
+            if (authActions.login.rejected.match(action)) {
                 if (action.payload?.fieldsErrors?.length) {
                     const error = action.payload?.fieldsErrors[0]
                     formikHelpers.setFieldError(error.field, error.error)

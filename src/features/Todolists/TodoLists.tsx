@@ -1,14 +1,14 @@
 import {TodoListDomainType} from "./todolists-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {useActions} from "../../bll/store";
+import {useSelector} from "react-redux";
 import {TasksStateType} from "../Task/tasks-reducer";
 import React, {useCallback, useEffect} from "react";
 import {Grid, Paper} from "@material-ui/core";
 import {AddItemForm, AddItemFormSubmitHelperType} from "../../components/AddItemForm/AddItemForm";
 import {Redirect} from "react-router-dom";
 import {authSelectors} from "../Login/";
-import {todoListsActions, todoListSelectors, TodoList} from "./index";
+import {TodoList, todoListsActions, todoListSelectors} from "./index";
 import {tasksSelectors} from "../Task";
+import {useActions, useAppDispatch} from "../../utils/utils-redux";
 
 type TodoListsPropsType = {
     demo?: boolean
@@ -19,21 +19,21 @@ export const TodoLists: React.FC<TodoListsPropsType> = ({demo = false}) => {
     let todoLists: Array<TodoListDomainType> = useSelector(todoListSelectors.todoListsSelector)
     let tasks: TasksStateType = useSelector(tasksSelectors.tasksSelector)
     const isLoggedIn = useSelector(authSelectors.isLoggedInSelector)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
-    const {fetchTodoListsTC} = useActions(todoListsActions)
+    const {fetchTodoLists} = useActions(todoListsActions)
 
     useEffect(() => {
         if (demo || !isLoggedIn) {
             return;
         }
-        fetchTodoListsTC()
+        fetchTodoLists()
     }, [])
 
     const addTodoList = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
-        const thunk = todoListsActions.addTodoListTC(title)
-        const action: any = await dispatch(thunk)
-        if (todoListsActions.addTodoListTC.rejected.match(action)) {
+        const thunk = todoListsActions.addTodoList(title)
+        const action = await dispatch(thunk)
+        if (todoListsActions.addTodoList.rejected.match(action)) {
             if (action.payload?.errors?.length) {
                 const error = action.payload?.errors[0]
                 helper.setError(error)
