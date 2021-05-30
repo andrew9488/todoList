@@ -94,5 +94,5 @@ export const slice = createSlice({
     }
 })
 
-export const {changeTodoListEntityStatus} = slice.actions
+export const {changeFilterTodoList, changeTodoListEntityStatus} = slice.actions
 export const asyncActions = {fetchTodoLists, removeTodoList, addTodoList, changeTodoListTitle}

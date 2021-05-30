@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {authAPI} from "../../api/todolist-api";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../../utils/utils-error";
-import { setIsLoggedIn } from "../Login/authReducer";
+import { setIsLoggedIn } from "../Login/auth-reducer";
 
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed"
 
@@ -47,7 +47,7 @@ export const slice = createSlice({
     }
 })
 
-export const {setAppStatus} = slice.actions
+export const {setAppStatus, setAppError} = slice.actions
 export const asyncActions = {initializeApp}
 
 

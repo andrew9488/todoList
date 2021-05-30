@@ -142,5 +142,5 @@ export const slice = createSlice({
     }
 })
 
-const {changeTasksEntityStatusAC} = slice.actions
+export const {changeTasksEntityStatusAC} = slice.actions
 export const asyncActions = {fetchTasks, removeTask, addTask, updateTask}
