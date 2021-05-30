@@ -1,19 +1,19 @@
-import {tasksReducer, TasksStateType} from "../Task/tasks-reducer";
-import {
-    addTodoListTC,
-    fetchTodoListsTC,
-    removeTodoListTC,
-    TodoListDomainType,
-    todoListsReducer
-} from "./todolists-reducer";
+import {TasksStateType} from "../Task/tasks-reducer";
+import {TodoListDomainType} from "./todolists-reducer";
 import {TaskPriorities, TaskStatuses} from "../../api/todolist-api";
+import {todoListsActions} from "./index";
+import {slice as todoListsSlice} from "./todolists-reducer"
+import {slice as tasksSlice} from "../Task/tasks-reducer"
+
+const tasksReducer = tasksSlice.reducer
+const todoListsReducer = todoListsSlice.reducer
 
 test('ids should be equals', () => {
     const startTasksState: TasksStateType = {};
     const startTodoListsState: Array<TodoListDomainType> = [];
 
     let todoList = {todoList: {id: "todoListId3", title: "What to create", addedDate: "", order: 2}};
-    const action = addTodoListTC.fulfilled(todoList, "", todoList.todoList.title);
+    const action = todoListsActions.addTodoList.fulfilled(todoList, "", todoList.todoList.title);
 
     const endTasksState = tasksReducer(startTasksState, action)
     const endTodoListsState = todoListsReducer(startTodoListsState, action)
@@ -30,7 +30,7 @@ test('property with todolistId should be deleted', () => {
     const startState: TasksStateType = {
         "todoListId1": [
             {
-                id: "1", title: "CSS", status: TaskStatuses.New, addedDate: "", deadline: "",
+                id: "1", title: "CSS&HTML", status: TaskStatuses.New, addedDate: "", deadline: "",
                 description: "", order: 0, priority: TaskPriorities.Low, startDate: "", todoListId: "todoListId1",
                 entityStatus: "idle"
             },
@@ -64,7 +64,7 @@ test('property with todolistId should be deleted', () => {
         ]
     };
 
-    const action = removeTodoListTC.fulfilled({id: "todoListId2"}, "", "todoListId2");
+    const action = todoListsActions.removeTodoList.fulfilled({id: "todoListId2"}, "", "todoListId2");
 
     const endState = tasksReducer(startState, action)
 
@@ -82,7 +82,7 @@ test('empty arrays should be added when todolists was set', () => {
             {id: "2", title: "What to buy", addedDate: "", order: 1}
         ]
     };
-    const action = fetchTodoListsTC.fulfilled(todoLists, "")
+    const action = todoListsActions.fetchTodoLists.fulfilled(todoLists, "", undefined)
 
     const endState = tasksReducer({}, action)
 
