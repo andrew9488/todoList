@@ -1,17 +1,6 @@
-import {tasksReducer} from '../features/Task';
-import {todoListsReducer} from '../features/Todolists';
-import {combineReducers} from 'redux';
 import thunk from "redux-thunk";
-import {appReducer} from "../features/Application";
-import {authReducer} from "../features/Login";
 import {configureStore} from "@reduxjs/toolkit";
-
-const rootReducer = combineReducers({
-    app: appReducer,
-    tasks: tasksReducer,
-    todoLists: todoListsReducer,
-    auth: authReducer
-})
+import {rootReducer} from "./rootReducer";
 
 export const store = configureStore({
     reducer: rootReducer,
@@ -23,4 +12,7 @@ export type AppRootStateType = ReturnType<typeof rootReducer>
 
 export type AppDispatchType = typeof store.dispatch
 
+if (process.env.NODE_ENV !== "production" && module.hot) {
+    module.hot.accept("./rootReducer", () => store.replaceReducer(rootReducer))
+}
 

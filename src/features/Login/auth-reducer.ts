@@ -1,6 +1,6 @@
 import {authAPI, LoginParamsType} from "../../api/todolist-api";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError, ThunkError} from "../../utils/utils-error";
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {appActions} from "../Actions/App";
 
 export type InitialStateType = typeof initialState

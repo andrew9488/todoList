@@ -12,11 +12,9 @@ import {appActions, appSelectors} from "../features/Application";
 import {useActions} from "../utils/utils-redux";
 
 
-type AppPropsType = {
-    demo?: boolean
-}
+type AppPropsType = {}
 
-export const App: React.FC<AppPropsType> = ({demo = false}) => {
+export const App: React.FC<AppPropsType> = () => {
 
     const isInitialized = useSelector(appSelectors.isInitializedSelector)
     const appStatus = useSelector(appSelectors.appStatusSelector)
@@ -25,7 +23,9 @@ export const App: React.FC<AppPropsType> = ({demo = false}) => {
     const {logout} = useActions(authActions)
 
     useEffect(() => {
-        initializeApp()
+        if (!isInitialized) {
+            initializeApp()
+        }
     }, [])
 
     const logoutCallback = () => {
@@ -53,7 +53,7 @@ export const App: React.FC<AppPropsType> = ({demo = false}) => {
             </AppBar>
             <Container fixed>
                 <Switch>
-                    <Route exact path="/" render={() => <TodoLists demo={demo}/>}/>
+                    <Route exact path="/" render={() => <TodoLists demo={false}/>}/>
                     <Route path="/login" render={() => <Login/>}/>
                     <Route path="/404" render={() => <h1>ERROR 404. PAGE NOT FOUND</h1>}/>
                     <Redirect from="*" to="/404"/>

@@ -28,7 +28,9 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
         if (demo) {
             return;
         }
-        fetchTasks(props.todoList.id)
+        if (!props.tasks.length) {
+            fetchTasks(props.todoList.id)
+        }
     }, [])
 
     let allTaskForTodoList = props.tasks

@@ -1,6 +1,6 @@
 import {todoListsApi, TodoListType} from "../../api/todolist-api";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError, ThunkError} from "../../utils/utils-error";
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {RequestStatusType} from "../Application/application-reducer";
 import {appActions} from "../Actions/App";
 
