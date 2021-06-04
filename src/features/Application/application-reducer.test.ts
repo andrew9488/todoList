@@ -1,5 +1,6 @@
-import {InitialStateType, setAppStatus, slice, setAppError} from "./application-reducer";
+import {InitialStateType, slice} from "./application-reducer";
 import {appActions} from "./index";
+import {appActions as ActionCreators} from "../Actions/App"
 
 const appReducer = slice.reducer
 
@@ -17,7 +18,7 @@ test("status should be set", () => {
 
     const status = "succeeded"
 
-    const endState = appReducer(initialState, setAppStatus({status}))
+    const endState = appReducer(initialState, ActionCreators.setAppStatus({status}))
 
     expect(endState.status).toBe("succeeded")
 
@@ -27,7 +28,7 @@ test("error should be set", () => {
 
     const error = null
 
-    const endState = appReducer(initialState, setAppError({error}))
+    const endState = appReducer(initialState, ActionCreators.setAppError({error}))
 
     expect(endState.error).toBe(null)
 })

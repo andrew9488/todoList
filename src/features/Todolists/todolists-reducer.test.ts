@@ -1,20 +1,15 @@
 import {v1} from 'uuid';
-import {
-    TodoListDomainType,
-    FilterValuesType,
-    changeTodoListEntityStatus,
-    slice,
-    changeFilterTodoList
-} from "./todolists-reducer";
+import {TodoListDomainType, FilterValuesType, slice,} from "./todolists-reducer";
 import {todoListsActions} from './index';
-import { RequestStatusType } from '../Application/application-reducer';
+import {RequestStatusType} from '../Application/application-reducer';
+import {appActions as ActionCreators} from "../Actions/App"
 
 let todoListId1: string
 let todoListId2: string
 let startState: Array<TodoListDomainType>
 
 const todoListsReducer = slice.reducer
-const {addTodoList, removeTodoList,changeTodoListTitle} =todoListsActions
+const {addTodoList, removeTodoList, changeTodoListTitle} = todoListsActions
 
 beforeEach(() => {
     todoListId1 = v1();
@@ -65,7 +60,7 @@ test('correct filter of todoList should be changed', () => {
 
     let newFilter: FilterValuesType = "completed";
 
-    const action = changeFilterTodoList({id: todoListId2, filter: newFilter})
+    const action = ActionCreators.changeFilterTodoList({id: todoListId2, filter: newFilter})
 
     const endState = todoListsReducer(startState, action);
 
@@ -87,7 +82,7 @@ test("entity status should be change", () => {
 
     let status: RequestStatusType = "succeeded"
 
-    const endState = todoListsReducer(startState, changeTodoListEntityStatus({
+    const endState = todoListsReducer(startState, ActionCreators.changeTodoListEntityStatus({
         todoListId: todoListId2,
         entityStatus: status
     }))

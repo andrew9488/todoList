@@ -1,8 +1,9 @@
-import {changeTasksEntityStatusAC, TasksStateType} from "./tasks-reducer";
+import { TasksStateType} from "./tasks-reducer";
 import {TaskPriorities, TaskStatuses} from "../../api/todolist-api";
 import {tasksActions} from "./index";
 import {slice} from "./tasks-reducer"
 import {todoListsActions} from "../Todolists";
+import {appActions as ActionCreators} from "../Actions/App"
 
 const tasksReducer = slice.reducer
 const {addTask, fetchTasks, removeTask, updateTask} = tasksActions
@@ -170,7 +171,7 @@ test('empty array should be added for todolists', () => {
 
 test('entity status task should be changed', () => {
 
-    const action = changeTasksEntityStatusAC({todoListId: "todoListId1", taskId: "2", entityStatus: "succeeded"});
+    const action = ActionCreators.changeTasksEntityStatus({todoListId: "todoListId1", taskId: "2", entityStatus: "succeeded"});
 
     const endState = tasksReducer(startState, action)
 
