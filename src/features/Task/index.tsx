@@ -4,7 +4,6 @@ import {Task} from "./Task";
 
 const tasksActions = {
     ...tasksAsyncActions,
-    ...slice.actions
 }
 
 const tasksReducer = slice.reducer

@@ -9,6 +9,7 @@ import {TaskDomainType} from "../../Task/tasks-reducer";
 import {todoListsActions} from "../index";
 import {Task, tasksActions} from "../../Task";
 import {useActions, useAppDispatch} from "../../../utils/utils-redux";
+import {appActions} from "../../Actions/App";
 
 type TodoListPropsType = {
     todoList: TodoListDomainType
@@ -18,8 +19,9 @@ type TodoListPropsType = {
 
 export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, ...props}) => {
 
-    const {changeTodoListTitle, removeTodoList, changeFilterTodoList} = useActions(todoListsActions)
+    const {changeTodoListTitle, removeTodoList} = useActions(todoListsActions)
     const {fetchTasks} = useActions(tasksActions)
+    const {changeFilterTodoList} = useActions(appActions)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -41,7 +43,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
 
     const changeTodoListTitleCallback = useCallback((newTitle: string) => {
         changeTodoListTitle({title: newTitle, todoListId: props.todoList.id})
-    }, [props.todoList.id,changeTodoListTitle] )
+    }, [props.todoList.id, changeTodoListTitle])
     const removeTodoListCallback = useCallback(() => {
         removeTodoList(props.todoList.id)
     }, [props.todoList.id, removeTodoList])

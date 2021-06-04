@@ -4,7 +4,7 @@ import MuiAlert, {AlertProps} from '@material-ui/lab/Alert';
 import {useSelector} from "react-redux";
 import {AppRootStateType} from "../../bll/store";
 import { useActions } from '../../utils/utils-redux';
-import { appActions } from '../../features/Application';
+import { appActions } from '../../features/Actions/App';
 
 function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;

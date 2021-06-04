@@ -6,7 +6,6 @@ import {TodoList} from "./Todolist/TodoList"
 
 const todoListsActions = {
     ...todoListsAsyncActions,
-    ...slice.actions
 }
 
 

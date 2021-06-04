@@ -1,13 +1,15 @@
 import {authAPI, LoginParamsType} from "../../api/todolist-api";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError, ThunkError} from "../../utils/utils-error";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {setAppStatus} from "../Application/application-reducer";
+import {appActions} from "../Actions/App";
 
 export type InitialStateType = typeof initialState
 
 const initialState = {
     isLoggedIn: false
 }
+
+const {setAppStatus, setIsLoggedIn} = appActions
 
 const login = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType, ThunkError>("auth/login", async (payload, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: "loading"}))
@@ -42,22 +44,23 @@ const logout = createAsyncThunk("auth/logout", async (payload, thunkAPI) => {
 export const slice = createSlice({
     name: "auth",
     initialState: initialState,
-    reducers: {
-        setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
-            state.isLoggedIn = action.payload.isLoggedIn
-        }
-    },
+    reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(login.fulfilled, (state, action) => {
-            state.isLoggedIn = action.payload.isLoggedIn
-        })
-        builder.addCase(logout.fulfilled, (state, action) => {
-            state.isLoggedIn = action.payload.isLoggedIn
-        })
+        builder
+            .addCase(login.fulfilled, (state, action) => {
+                state.isLoggedIn = action.payload.isLoggedIn
+            })
+            .addCase(logout.fulfilled, (state, action) => {
+                state.isLoggedIn = action.payload.isLoggedIn
+            })
+            .addCase(setIsLoggedIn, (state, action) => {
+                state.isLoggedIn = action.payload.isLoggedIn
+            })
+
     }
 })
 
 export const asyncActions = {login, logout}
-export const {setIsLoggedIn}=slice.actions
+
 
 

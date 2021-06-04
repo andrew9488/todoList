@@ -1,6 +1,6 @@
 import {FieldsErrorsType, ResponseType} from "../api/todolist-api";
 import {AxiosError} from "axios";
-import {appActions} from "../features/Application";
+import {appActions} from "../features/Actions/App";
 
 // original type:
 // BaseThunkAPI<S, E, D extends Dispatch = Dispatch, RejectedValue = undefined>

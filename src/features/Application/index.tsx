@@ -5,7 +5,6 @@ import {asyncActions as appAsyncActions} from "./application-reducer"
 
 const appActions = {
     ...appAsyncActions,
-    ...slice.actions
 }
 
 const appReducer = slice.reducer

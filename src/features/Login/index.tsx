@@ -5,7 +5,6 @@ import {Login} from "./Login"
 
 const authActions = {
     ...authAsyncActions,
-    ...slice.actions
 }
 
 const authReducer = slice.reducer

@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {authAPI} from "../../api/todolist-api";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../../utils/utils-error";
-import { setIsLoggedIn } from "../Login/auth-reducer";
+import {appActions} from "../Actions/App";
 
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed"
 
@@ -12,6 +12,8 @@ const initialState = {
     error: null as string | null,
     isInitialized: false
 }
+
+const {setAppStatus,setIsLoggedIn} = appActions
 
 const initializeApp = createAsyncThunk("application/initializeApp", async (payload, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: "loading"}))
@@ -32,22 +34,21 @@ const initializeApp = createAsyncThunk("application/initializeApp", async (paylo
 export const slice = createSlice({
     name: "app",
     initialState: initialState,
-    reducers: {
-        setAppStatus: (state, action: PayloadAction<{ status: RequestStatusType }>) => {
-            state.status = action.payload.status
-        },
-        setAppError: (state, action: PayloadAction<{ error: string | null }>) => {
-            state.error = action.payload.error
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(initializeApp.fulfilled, (state, action) => {
-            state.isInitialized = action.payload.isInitialized
-        })
+        builder
+            .addCase(initializeApp.fulfilled, (state, action) => {
+                state.isInitialized = action.payload.isInitialized
+            })
+            .addCase(appActions.setAppStatus, (state, action) => {
+                state.status = action.payload.status
+            })
+            .addCase(appActions.setAppError, (state, action) => {
+                state.error = action.payload.error
+            })
     }
 })
 
-export const {setAppStatus, setAppError} = slice.actions
 export const asyncActions = {initializeApp}
 
 
