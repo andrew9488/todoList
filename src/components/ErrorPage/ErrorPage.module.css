@@ -1,0 +1,23 @@
+.error {
+    font-size: 30px;
+    text-align: center;
+    padding: 50px;
+    color: #f50057;
+}
+
+.errorCat {
+    padding: 20px;
+    font-size: 70px;
+    color: #f50057;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.item a {
+    background-color: #3f51b5;
+    text-decoration: none;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+
+}

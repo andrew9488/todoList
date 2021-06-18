@@ -10,6 +10,7 @@ import {Redirect, Route, Switch} from 'react-router-dom';
 import {authActions, authSelectors} from "../features/Login";
 import {appActions, appSelectors} from "../features/Application";
 import {useActions} from "../utils/utils-redux";
+import {Error} from "../components/ErrorPage/ErrorPage";
 
 
 type AppPropsType = {}
@@ -43,10 +44,10 @@ export const App: React.FC<AppPropsType> = () => {
         <div className="App">
             <AppBar position="static">
                 <ErrorSnackbar/>
-                <Toolbar style={{display:"flex", justifyContent: "space-between"}}>
-                    <IconButton edge="start" color="inherit" aria-label="menu">
+                <Toolbar style={{display: "flex", justifyContent: "space-between"}}>
+                    {isLoggedIn && <IconButton edge="start" color="inherit" aria-label="menu">
                         <Menu/>
-                    </IconButton>
+                    </IconButton>}
                     {isLoggedIn && <Button color="inherit" onClick={logoutCallback}>Logout</Button>}
                 </Toolbar>
                 {appStatus === "loading" && <LinearProgress color="secondary"/>}
@@ -55,7 +56,7 @@ export const App: React.FC<AppPropsType> = () => {
                 <Switch>
                     <Route exact path="/" render={() => <TodoLists demo={false}/>}/>
                     <Route path="/login" render={() => <Login/>}/>
-                    <Route path="/404" render={() => <h1>ERROR 404. PAGE NOT FOUND</h1>}/>
+                    <Route path="/404" render={() => <Error/>}/>
                     <Redirect from="*" to="/404"/>
                 </Switch>
             </Container>
