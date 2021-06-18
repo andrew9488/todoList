@@ -1,5 +1,13 @@
 import React from 'react'
-import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@material-ui/core'
+import {Avatar, Box, Button,
+    Checkbox,
+    Container,
+    CssBaseline,
+    FormControlLabel, Grid, Link,
+    makeStyles,
+    TextField,
+    Typography} from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import {FormikHelpers, useFormik} from "formik";
 import {useSelector} from "react-redux";
 import {Redirect} from "react-router-dom";
@@ -18,8 +26,43 @@ type FormikErrorType = {
     rememberMe?: boolean
 }
 
+function Copyright() {
+    return (
+        <Typography variant="body2" color="textSecondary" align="center">
+            {'Copyright © '}
+            <Link color="inherit" href="https://github.com/andrew9488/todoList" target={'_blank'} rel="noopener noreferrer">
+                Website
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
+
+const useStyles = makeStyles((theme) => ({
+    paper: {
+        marginTop: theme.spacing(3),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%',
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+}));
+
+
 export const Login: React.FC = () => {
 
+    const classes = useStyles();
     const isLoggedIn = useSelector(authSelectors.isLoggedInSelector)
     const dispatch = useAppDispatch()
 
@@ -60,46 +103,75 @@ export const Login: React.FC = () => {
         return <Redirect to="/"/>
     }
 
-    return <Grid container justify="center">
-        <Grid item xs={4}>
-            <form onSubmit={formik.handleSubmit}>
-                <FormControl>
-                    <FormLabel>
-                        <p>To log in get registered
-                            <a href={'https://social-network.samuraijs.com/'}
-                               target={'_blank'} rel="noopener noreferrer"> here
-                            </a>
-                        </p>
-                        <p>or use common test account credentials:</p>
-                        <p>Email: free@samuraijs.com</p>
-                        <p>Password: free</p>
-                    </FormLabel>
-                    <FormGroup>
-                        <TextField
-                            label="Email"
-                            margin="normal"
-                            {...formik.getFieldProps("email")}
-                        />
-                        {formik.touched.email && formik.errors.email ? (
-                            <div style={{color: "red"}}>{formik.errors.email}</div>) : null}
-                        <TextField
-                            type="password"
-                            label="Password"
-                            margin="normal"
-                            {...formik.getFieldProps("password")}
-                        />
-                        {formik.touched.password && formik.errors.password ? (
-                            <div style={{color: "red"}}>{formik.errors.password}</div>) : null}
-                        <FormControlLabel
-                            label={'Remember me'}
-                            control={<Checkbox{...formik.getFieldProps("rememberMe")}
-                                              checked={formik.values.rememberMe}
-                            />}
-                        />
-                        <Button type={'submit'} variant={'contained'} color={'primary'}>Login</Button>
-                    </FormGroup>
-                </FormControl>
-            </form>
-        </Grid>
-    </Grid>
+    return (
+        <Container component="main" maxWidth="xs">
+            <CssBaseline/>
+            <div className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon/>
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign in
+                </Typography>
+                <form className={classes.form} noValidate onSubmit={formik.handleSubmit}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        autoComplete="email"
+                        autoFocus
+                        {...formik.getFieldProps('email')}
+                    />
+                    {formik.touched.email && formik.errors.email ?
+                        <div style={{color: 'red'}}>{formik.errors.email}</div> : ''}
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        {...formik.getFieldProps('password')}
+                    />
+                    {formik.touched.password && formik.errors.password ?
+                        <div style={{color: 'red'}}>{formik.errors.password}</div> : ''}
+                    <FormControlLabel
+                        control={<Checkbox checked={formik.values.rememberMe}
+                                           {...formik.getFieldProps('rememberMe')}
+                                           color="primary"/>}
+                        label="Remember me"
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        Login
+                    </Button>
+                    <Grid container>
+                        <Grid item>
+                            <Link href='https://social-network.samuraijs.com/' variant="body2" target={'_blank'}>
+                                {'Don\'t have an account? Sign Up'}
+                            </Link>
+                        </Grid>
+                        <Grid style={{marginTop: '20px', color: '#0000008A'}}>
+                            <p>You can use common test account credentials:</p>
+                            <p>Email: free@samuraijs.com</p>
+                            <p>Password: free</p>
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+            <Box mt={8}>
+                <Copyright/>
+            </Box>
+        </Container>
+    )
 }

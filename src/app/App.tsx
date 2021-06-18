@@ -43,7 +43,7 @@ export const App: React.FC<AppPropsType> = () => {
         <div className="App">
             <AppBar position="static">
                 <ErrorSnackbar/>
-                <Toolbar>
+                <Toolbar style={{display:"flex", justifyContent: "space-between"}}>
                     <IconButton edge="start" color="inherit" aria-label="menu">
                         <Menu/>
                     </IconButton>
