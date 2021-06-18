@@ -1,4 +1,4 @@
-import {TaskPriorities, TaskStatuses, TaskType, todoListsApi} from "../../api/todolist-api";
+import {ResultStatusCode, TaskPriorities, TaskStatuses, TaskType, todoListsApi} from "../../api/todolist-api";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError, ThunkError} from "../../utils/utils-error";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AppRootStateType} from "../../bll/store";
@@ -41,7 +41,7 @@ const removeTask = createAsyncThunk("tasks/removeTask", async (payload: { todoLi
     }))
     try {
         const response = await todoListsApi.deleteTask(payload.todoListId, payload.taskId)
-        if (response.data.resultCode === 0) {
+        if (response.data.resultCode === ResultStatusCode.success) {
             thunkAPI.dispatch(setAppStatus({status: "succeeded"}))
             return {taskId: payload.taskId, todoListId: payload.todoListId}
         } else {
@@ -56,7 +56,7 @@ const addTask = createAsyncThunk<{ task: TaskType }, { title: string, todoListId
         thunkAPI.dispatch(setAppStatus({status: "loading"}))
         try {
             const response = await todoListsApi.createTask(payload.todoListId, payload.title)
-            if (response.data.resultCode === 0) {
+            if (response.data.resultCode === ResultStatusCode.success) {
                 thunkAPI.dispatch(setAppStatus({status: "succeeded"}))
                 return {task: response.data.data.item}
             } else {
@@ -86,7 +86,7 @@ const updateTask = createAsyncThunk("tasks/updateTask", async (payload: { taskId
     }
     try {
         const response = await todoListsApi.updateTask(payload.todoListId, payload.taskId, apiModel)
-        if (response.data.resultCode === 0) {
+        if (response.data.resultCode === ResultStatusCode.success) {
             thunkAPI.dispatch(setAppStatus({status: "succeeded"}))
             return {taskId: payload.taskId, model: payload.model, todoListId: payload.todoListId}
         } else {

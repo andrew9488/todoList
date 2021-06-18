@@ -59,7 +59,7 @@ export const TodoLists: React.FC<TodoListsPropsType> = ({demo = false}) => {
                     <AddItemForm addItem={addTodoList} title={"TodoList title"}/>
                 </Paper>
             </Grid>
-            <Grid container spacing={3} style={{flexWrap: "nowrap", overflowX: "scroll"}}>
+            <Grid container spacing={3} style={{flexWrap: "nowrap", overflowX: "scroll", paddingBottom: "15px"}}>
                 {
                     todoLists.map(tl => {
                         let allTaskTodoList = tasks[tl.id]

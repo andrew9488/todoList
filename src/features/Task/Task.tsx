@@ -32,9 +32,11 @@ export const Task: React.FC<TaskPropsType> = React.memo((props) => {
         updateTask({taskId: props.task.id, model: {title: newTitle}, todoListId: props.todoListId})
     }, [props.task.id, props.todoListId, updateTask])
 
+    const CompletedClassName = props.task.status === TaskStatuses.Completed ? "is-done" : ""
+
     return (
         <div style={{position: "relative"}}>
-            <li className={props.task.status === TaskStatuses.Completed ? "is-done" : ""}>
+            <li className={CompletedClassName}>
                 <Checkbox
                     color={"secondary"}
                     checked={props.task.status === TaskStatuses.Completed}

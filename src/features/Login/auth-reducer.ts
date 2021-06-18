@@ -1,4 +1,4 @@
-import {authAPI, LoginParamsType} from "../../api/todolist-api";
+import {authAPI, LoginParamsType, ResultStatusCode} from "../../api/todolist-api";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError, ThunkError} from "../../utils/utils-error";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {appActions} from "../Actions/App";
@@ -15,7 +15,7 @@ const login = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType, ThunkEr
     thunkAPI.dispatch(setAppStatus({status: "loading"}))
     try {
         const response = await authAPI.login(payload)
-        if (response.data.resultCode === 0) {
+        if (response.data.resultCode === ResultStatusCode.success) {
             thunkAPI.dispatch(setAppStatus({status: "succeeded"}))
             return {isLoggedIn: true}
         } else {
@@ -30,7 +30,7 @@ const logout = createAsyncThunk("auth/logout", async (payload, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: "loading"}))
     try {
         const response = await authAPI.logout()
-        if (response.data.resultCode === 0) {
+        if (response.data.resultCode === ResultStatusCode.success) {
             thunkAPI.dispatch(setAppStatus({status: "succeeded"}))
             return {isLoggedIn: false}
         } else {

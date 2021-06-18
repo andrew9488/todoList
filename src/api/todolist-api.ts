@@ -7,6 +7,11 @@ export type TodoListType = {
     title: string
 }
 
+export enum ResultStatusCode {
+    success = 0,
+    error = 1
+}
+
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,

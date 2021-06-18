@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {authAPI} from "../../api/todolist-api";
+import {authAPI, ResultStatusCode} from "../../api/todolist-api";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../../utils/utils-error";
 import {appActions} from "../Actions/App";
 
@@ -19,8 +19,8 @@ const initializeApp = createAsyncThunk("application/initializeApp", async (paylo
     thunkAPI.dispatch(setAppStatus({status: "loading"}))
     try {
         const response = await authAPI.me()
-        if (response.data.resultCode === 0) {
-            thunkAPI.dispatch(setIsLoggedIn({isLoggedIn: true}))
+        if (response.data.resultCode === ResultStatusCode.success) {
+            thunkAPI.dispatch(setIsLoggedIn({isLoggedIn: true}));
             thunkAPI.dispatch(setAppStatus({status: "succeeded"}))
         } else {
             return handleAsyncServerAppError(response.data, thunkAPI)
